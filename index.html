@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Which Noodles model to use for images, video, text, audio and finishing.">
-<title>Noodles Model Guide</title>
+<meta name="description" content="Which Creative Flows model to use for images, video, text, audio and finishing.">
+<title>Creative Flows Model Guide</title>
 <style>
 /* Layout: hero, one toolbar (tabs + search), then list | chart. A click swaps the chart for a model card. */
 :root {
@@ -306,7 +306,7 @@ footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <div class="page">
   <header class="hero">
-    <p class="eyebrow">Noodles · Model guide</p>
+    <p class="eyebrow">Creative Flows · Model guide</p>
     <h1>Which model should I use?</h1>
     <p class="lede" id="lede">Pick what you’re making. Stars mark the best models. Click any model to open its card.</p>
   </header>
@@ -332,7 +332,7 @@ footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line);
     <div id="chains" class="chain-list"></div>
   </section>
 
-  <footer>Rankings follow the team’s guidance and the arena.ai leaderboards for image, image editing and video, October 2026. Use cases come from the Noodles presets and real runs. Times, costs and limits come from the model catalog and test runs, October 2026.</footer>
+  <footer>Rankings follow the team’s guidance and the arena.ai leaderboards for image, image editing and video, October 2026. Use cases come from the Creative Flows presets and real runs. Times, costs and limits come from the model catalog and test runs, October 2026.</footer>
 </div>
 
 <div class="tip" id="tip" role="tooltip" hidden></div>
@@ -642,7 +642,7 @@ const FIXES = [
     use: { kind: 'run', flow: ['image', 'tts', 'lipSync*'], line: 'A generated portrait and a Text to Speech line, on Fabric at 480p.' },
     more: 'Fabric lets you pick 720p or 480p and takes up to 60 s of audio. Creatify Aurora is quicker and cheaper: a 4-second test took 65 s and $0.56, against 87 s and $0.75 on Fabric.' },
   { id: 'vid-extend', group: 'video', q: 'Make it longer', node: 'video', noKey: true,
-    text: 'Hover a finished clip and choose Extend. Noodles adds a new Video node that outputs the longer clip.',
+    text: 'Hover a finished clip and choose Extend. Creative Flows adds a new Video node that outputs the longer clip.',
     more: 'Omni Flash adds 3 to 10 s to clips up to 30 s. Veo adds about 7 s. Seedance 2.5 adds the seconds you pick. Seedance 2.0 clips can’t be extended yet.' },
 ];
 
@@ -758,7 +758,7 @@ function setTab(id, instant) {
   state.preview = null;
   state.open = null;
   state.openFix = null;
-  store('noodles-guide-tab', id);
+  store('creative-flows-guide-tab', id);
   try { history.replaceState(null, '', '#' + id); } catch (e) {}
   renderTabs();
   renderPanel(instant);
@@ -1305,7 +1305,7 @@ $('#search-ic').outerHTML = icon('SearchOutlined');
 $('#toast-ic').outerHTML = icon('CheckOutlined');
 renderChains();
 const hash = (location.hash || '').slice(1);
-const saved = load('noodles-guide-tab');
+const saved = load('creative-flows-guide-tab');
 state.tab = tabById(hash) ? hash : tabById(saved) ? saved : 'image';
 renderTabs();
 renderPanel(true);
