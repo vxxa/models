@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Which Noodles model to use for images, video, text, audio and finishing.">
+<title>Noodles Model Guide</title>
+<style>
+/* Layout: hero, one toolbar (tabs + search), then list | chart. A click swaps the chart for a model card. */
+:root {
+  --bg: #F9F9FA;
+  --surface: #FFFFFF;
+  --well: #F4F5F6;
+  --line: #E7E8EB;
+  --line-strong: #D8DADF;
+  --ink-strong: #232329;
+  --ink: #454555;
+  --ink-2: #616371;
+  --ink-3: #818391;
+  --ink-4: #AAACB7;
+  --primary: #1966FF;
+  --primary-soft: rgba(25, 102, 255, 0.10);
+  --primary-line: rgba(25, 102, 255, 0.32);
+  --star: #FAAD14;
+  --seg-sel: #FFFFFF;
+  --grid: #E7E8EB;
+  --radar-bg: #FBFBFC;
+  --tip-bg: rgba(35, 35, 41, 0.94);
+  --tip-ink: #FFFFFF;
+  --ok: #389E0D;
+  --card-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 0 14px 36px -14px rgba(0, 0, 0, 0.16);
+  --s1: #1966FF;
+  --s2: #E05A2A;
+  --s3: #119E78;
+  --s4: #A43CC8;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-pop: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'SF Mono', Monaco, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B0B0E; --surface: #17171C; --well: #22222C; --line: #2C2C38; --line-strong: #454555;
+    --ink-strong: #F9F9FA; --ink: #D8DADF; --ink-2: #AAACB7; --ink-3: #8C8E9B; --ink-4: #616371;
+    --primary: #4D8AFF; --primary-soft: rgba(77, 138, 255, 0.16); --primary-line: rgba(77, 138, 255, 0.45);
+    --star: #FADB14;
+    --seg-sel: #363645; --grid: #2E2E3A; --radar-bg: #131318;
+    --tip-bg: rgba(54, 54, 69, 0.97); --tip-ink: #F9F9FA; --ok: #73D13D;
+    --card-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 14px 36px -14px rgba(0, 0, 0, 0.6);
+    --s1: #4D8AFF; --s2: #E0602E; --s3: #19A47A; --s4: #CF55C8;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-pop: 0 6px 16px rgba(0, 0, 0, 0.45), 0 9px 28px 8px rgba(0, 0, 0, 0.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B0B0E; --surface: #17171C; --well: #22222C; --line: #2C2C38; --line-strong: #454555;
+  --ink-strong: #F9F9FA; --ink: #D8DADF; --ink-2: #AAACB7; --ink-3: #8C8E9B; --ink-4: #616371;
+  --primary: #4D8AFF; --primary-soft: rgba(77, 138, 255, 0.16); --primary-line: rgba(77, 138, 255, 0.45);
+  --star: #FADB14;
+  --seg-sel: #363645; --grid: #2E2E3A; --radar-bg: #131318;
+  --tip-bg: rgba(54, 54, 69, 0.97); --tip-ink: #F9F9FA; --ok: #73D13D;
+  --card-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 14px 36px -14px rgba(0, 0, 0, 0.6);
+  --s1: #4D8AFF; --s2: #E0602E; --s3: #19A47A; --s4: #CF55C8;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-pop: 0 6px 16px rgba(0, 0, 0, 0.45), 0 9px 28px 8px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/24px var(--font); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; padding: 0; text-align: inherit; }
+h1, h2, h3, h4, p, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 6px; }
+.ic { width: 1em; height: 1em; fill: currentColor; flex: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+kbd { font: 500 12px/18px var(--mono); padding: 0 5px; border-radius: 4px; background: var(--well); border: 1px solid var(--line-strong); border-bottom-width: 2px; color: var(--ink); }
+.star { display: inline-flex; color: var(--star); font-size: 0.8em; vertical-align: 0.05em; margin-left: 6px; }
+
+/* Text styles: display 32, title 20, label 15/600, body 15, small 13. Controls 14. */
+.page { max-width: 1120px; margin: 0 auto; padding-inline: 24px; padding-block: 40px 64px; }
+.hero { display: grid; gap: 8px; margin-bottom: 32px; }
+.eyebrow { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+h1 { font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink-strong); text-wrap: balance; }
+.lede { color: var(--ink-2); max-width: 72ch; }
+.lede .star { margin: 0 2px; }
+
+/* ---------- Toolbar ---------- */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; padding-bottom: 20px; margin-bottom: 36px; border-bottom: 1px solid var(--line); }
+.seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: 8px; background: var(--well); }
+.seg button { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 6px; font-size: 14px; color: var(--ink-2); transition: color .2s, background .2s, box-shadow .2s; }
+.seg button:hover { color: var(--ink-strong); }
+.seg button[aria-selected="true"] { background: var(--seg-sel); color: var(--ink-strong); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 1px 4px -1px rgba(0,0,0,.04); }
+.search { position: relative; width: 300px; }
+.search > .ic { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 14px; pointer-events: none; }
+.search input { width: 100%; height: 36px; padding: 0 36px 0 33px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); font: 14px var(--font); color: var(--ink-strong); outline: none; transition: border-color .2s, box-shadow .2s; }
+.search input::placeholder { color: var(--ink-3); }
+.search input:hover, .search input:focus { border-color: var(--primary); }
+.search input:focus { box-shadow: 0 0 0 2px var(--primary-soft); }
+.search kbd { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); }
+.listbox { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; right: 0; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow-pop); max-height: 340px; overflow-y: auto; }
+.listbox li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 6px 10px; border-radius: 4px; font-size: 14px; line-height: 22px; color: var(--ink-strong); cursor: pointer; }
+.listbox li span + span { font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+.listbox li[aria-selected="true"] { background: var(--primary-soft); }
+.listbox .empty { color: var(--ink-3); cursor: default; }
+@media (max-width: 720px) {
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .search { width: 100%; }
+  .seg { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .seg button { flex-direction: column; justify-content: center; height: auto; padding: 6px 2px; gap: 2px; font-size: 12px; line-height: 16px; }
+  .seg button .ic { font-size: 16px; }
+}
+
+/* ---------- Explorer ---------- */
+.explore { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 56px; align-items: start; }
+.col-head { display: grid; gap: 2px; margin-bottom: 12px; }
+.col-head h3 { font-size: 15px; line-height: 22px; font-weight: 600; color: var(--ink-strong); }
+.col-head p { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.chart-col { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); }
+.chart-col.has-card { position: static; }
+#chart-view.rise { animation: fadein .2s ease-out both; }
+@keyframes fadein { from { opacity: 0; } }
+@media (max-width: 880px) {
+  .explore { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .chart-col { position: static; max-width: 460px; width: 100%; justify-self: center; }
+}
+
+/* ---------- Ladder ---------- */
+.ladder { position: relative; display: grid; }
+.ladder::before { content: ""; position: absolute; left: 13px; top: 30px; bottom: 30px; width: 2px; border-radius: 1px; background: var(--line); }
+.rung { width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) 16px; column-gap: 12px; padding: 14px 4px 14px 0; border-radius: 8px; }
+.rung .dot { justify-self: center; margin-top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 4px var(--bg); position: relative; z-index: 1; transition: box-shadow .25s; }
+.rt { font-size: 20px; line-height: 28px; font-weight: 500; color: var(--ink-2); transition: color .2s; }
+.rt .set { font-weight: 400; color: var(--ink-3); transition: color .2s; }
+.rd { grid-column: 2; margin-top: 2px; color: var(--ink-3); transition: color .2s; }
+.rung .go { margin-top: 6px; color: var(--ink-3); opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .2s; }
+.rung:hover .rt { color: var(--ink); }
+.rung.is-active .rt { color: var(--ink-strong); }
+.rung.is-active .rt .set { color: var(--ink-2); }
+.rung.is-active .rd { color: var(--ink-2); }
+.rung.is-active .dot { box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px color-mix(in srgb, var(--c) 35%, transparent); }
+.rung:hover .go, .rung:focus-visible .go { opacity: 1; transform: none; }
+.rung[aria-expanded="true"] .go { opacity: 1; transform: rotate(90deg); color: var(--ink-strong); }
+@media (min-width: 881px) { .rung[aria-expanded="true"] .go { transform: none; } }
+@media (hover: none) { .rung .go { opacity: .7; transform: none; } }
+.card-slot { padding: 4px 0 20px; }
+
+/* ---------- Radar ---------- */
+.radar-svg { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--font); }
+.r-bg { fill: var(--radar-bg); }
+.r-ring { fill: none; stroke: var(--grid); stroke-width: 1; }
+.r-spoke { stroke: var(--grid); stroke-width: 1; }
+.r-label { cursor: help; outline: none; }
+.r-label text { fill: var(--ink-3); font-size: 15px; transition: fill .2s; }
+.r-label:hover text, .r-label:focus-visible text { fill: var(--ink-strong); }
+.r-label-bg { fill: transparent; }
+.r-label:focus-visible .r-label-bg { stroke: var(--primary); stroke-width: 2; }
+#r-series polygon { stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; transition: opacity .25s; }
+#r-series polygon.is-dim { opacity: .35; }
+#r-series polygon.is-focus { stroke-width: 2.5; }
+.r-dot { stroke: var(--bg); stroke-width: 2; }
+.r-hit { fill: transparent; }
+.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 6px; margin-top: 12px; }
+.lg { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 6px; font-size: 13px; line-height: 20px; color: var(--ink-2); transition: background .2s, color .2s; }
+.lg.is-active { background: var(--well); color: var(--ink-strong); }
+.lg svg { width: 24px; height: 8px; overflow: visible; }
+.lg .star { margin-left: -2px; }
+.chart-hint { margin-top: 8px; text-align: center; font-size: 13px; line-height: 20px; color: var(--ink-3); }
+@media (max-width: 520px) { .r-label text { font-size: 18px; } }
+
+/* ---------- Audio decision ---------- */
+.tree { display: grid; gap: 12px; }
+.q { font-weight: 500; color: var(--ink-strong); }
+.branches { display: grid; gap: 12px; margin-left: 6px; padding-left: 20px; border-left: 1px solid var(--line-strong); }
+.br { position: relative; display: grid; gap: 12px; }
+.br::before { content: ""; position: absolute; left: -20px; top: 11px; width: 14px; height: 1px; background: var(--line-strong); }
+.br:last-child::after { content: ""; position: absolute; left: -21px; top: 12px; bottom: -2px; width: 3px; background: var(--bg); }
+.yn { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.leaf { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-weight: 500; transition: color .2s; }
+.leaf .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.leaf:hover, .leaf.is-active { color: var(--ink-strong); }
+.leaf .star { margin-left: -2px; }
+
+/* ---------- Finishing ---------- */
+.fix-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 40px 64px; align-items: start; }
+.fix-list li + li { border-top: 1px solid var(--line); }
+.fix-list li.fix-slot { border-top: 0; padding: 2px 0 18px; }
+.fix-list li.fix-slot + li { border-top: 0; }
+.fix { width: 100%; display: grid; grid-template-columns: 36px minmax(0, 1fr) 16px; gap: 14px; align-items: center; padding: 12px 4px 12px 0; }
+.fix-ic { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); font-size: 16px; transition: border-color .2s, color .2s; }
+.fix-t { display: block; font-weight: 500; color: var(--ink-strong); }
+.fix-n { display: block; font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.fix .go { color: var(--ink-3); opacity: 0; transition: opacity .2s, transform .2s; }
+.fix:hover .fix-ic, .fix[aria-expanded="true"] .fix-ic { border-color: var(--primary); color: var(--primary); }
+.fix:hover .go, .fix:focus-visible .go { opacity: 1; }
+.fix[aria-expanded="true"] .go { opacity: 1; transform: rotate(90deg); }
+@media (hover: none) { .fix .go { opacity: .7; } }
+
+/* ---------- Model card ---------- */
+.mcard-in { animation: fadein .18s ease-out both; }
+.mcard { position: relative; overflow: hidden; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--card-shadow); outline: none; }
+.mcard:focus-visible { box-shadow: 0 0 0 2px var(--primary), var(--card-shadow); }
+.mc-cover { position: relative; display: grid; gap: 6px; justify-items: start; min-height: 156px; padding: 18px 124px 18px 20px; background: linear-gradient(140deg, color-mix(in srgb, var(--c) 15%, var(--surface)) 0%, color-mix(in srgb, var(--c) 4%, var(--surface)) 72%); border-bottom: 1px solid color-mix(in srgb, var(--c) 16%, var(--line)); }
+.mc-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.mc-eyebrow kbd { margin-left: 2px; font-size: 11px; line-height: 16px; background: color-mix(in srgb, var(--surface) 70%, transparent); }
+.mc-title { font-size: 20px; line-height: 28px; font-weight: 600; color: var(--ink-strong); text-wrap: balance; }
+.mc-title .set { font-weight: 400; color: var(--ink-2); }
+.mc-desc { color: var(--ink); }
+.mc-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.mc-badge { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 13px; color: var(--ink-strong); background: color-mix(in srgb, var(--surface) 75%, transparent); border: 1px solid color-mix(in srgb, var(--c) 30%, var(--line)); }
+.mc-badge:not(.best)::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+.mc-badge.best { border-color: color-mix(in srgb, var(--star) 55%, var(--line)); background: color-mix(in srgb, var(--star) 14%, var(--surface)); }
+.mc-badge.best .ic { color: var(--star); }
+.mc-emblem { position: absolute; right: 22px; top: 46px; width: 92px; height: 92px; overflow: visible; }
+.em-ring { fill: none; stroke: color-mix(in srgb, var(--c) 22%, var(--line)); stroke-width: 1; }
+.em-shape { fill: color-mix(in srgb, var(--c) 22%, transparent); stroke: var(--c); stroke-width: 2; stroke-linejoin: round; }
+.mc-emblem-ic { display: grid; place-items: center; width: 64px; height: 64px; top: 50px; right: 30px; border-radius: 16px; font-size: 28px; color: var(--c); background: color-mix(in srgb, var(--c) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--c) 25%, var(--line)); }
+.mc-close { position: absolute; z-index: 2; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; color: var(--ink-2); font-size: 13px; transition: background .2s, color .2s; }
+.mc-close:hover { background: color-mix(in srgb, var(--ink-strong) 8%, transparent); color: var(--ink-strong); }
+.mc-facts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+.mc-facts div { display: grid; padding: 12px 16px 12px 20px; min-width: 0; }
+.mc-facts div + div { border-left: 1px solid var(--line); padding-left: 16px; }
+.mc-facts dd { grid-row: 1; font-size: 15px; line-height: 22px; font-weight: 600; color: var(--ink-strong); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mc-facts dt { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.mc-body { display: grid; gap: 12px; padding: 16px 20px 20px; }
+.mc-h { font-size: 13px; line-height: 20px; font-weight: 600; color: var(--ink-2); }
+.mc-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.mc-tab { height: 28px; padding: 0 12px; border-radius: 14px; font-size: 13px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line-strong); transition: color .2s, background .2s, border-color .2s; }
+.mc-tab:hover { color: var(--ink-strong); border-color: var(--ink-4); }
+.mc-tab[aria-selected="true"] { color: var(--ink-strong); background: color-mix(in srgb, var(--c) 12%, var(--surface)); border-color: color-mix(in srgb, var(--c) 55%, var(--line)); }
+.mc-use { display: grid; gap: 12px; padding: 14px; border-radius: 10px; background: var(--well); border: 1px solid var(--line); }
+.mc-use.swap { animation: fadein .15s ease-out both; }
+.mc-use-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; }
+.flow { display: flex; align-items: center; min-width: 0; }
+.fn { width: 26px; height: 26px; flex: none; border-radius: 7px; display: grid; place-items: center; font-size: 13px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line-strong); }
+.fn.self { color: var(--c); border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--surface)); }
+.fl-edge { width: 12px; height: 2px; flex: none; background: var(--line-strong); }
+.kind { flex: none; font-size: 12px; line-height: 20px; padding: 0 8px; border-radius: 10px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line-strong); white-space: nowrap; }
+.kind.preset { color: var(--primary); background: var(--primary-soft); border-color: var(--primary-line); }
+.mc-line { color: var(--ink); }
+.mc-line b { font-weight: 600; color: var(--ink-strong); }
+.mc-prompt { display: grid; gap: 6px; }
+.mc-prompt-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mc-from { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.mc-ptext { font-size: 14px; line-height: 22px; color: var(--ink-strong); white-space: pre-wrap; padding: 10px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.mc-ptext .clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.mc-ptext.is-open .clamp { display: block; }
+.mc-more { justify-self: start; font-size: 13px; line-height: 20px; color: var(--primary); }
+.mc-more:hover { text-decoration: underline; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--line-strong); background: var(--surface); font-size: 13px; color: var(--ink); transition: color .2s, border-color .2s; }
+.btn:hover { color: var(--primary); border-color: var(--primary); }
+.mc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip2 { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 8px; border-radius: 4px; font-size: 13px; line-height: 20px; color: var(--ink-strong); background: var(--surface); border: 1px solid var(--line); }
+.chip2 .k { color: var(--ink-3); }
+.mc-where { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+.fb-head { display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--ink-strong); }
+.fb-head kbd { font-size: 11px; line-height: 16px; }
+.mc-note { font-size: 14px; line-height: 22px; color: var(--ink); }
+
+/* ---------- Chains ---------- */
+.chains { margin-top: 72px; display: grid; gap: 32px; }
+.chains h2 { font-size: 20px; line-height: 28px; font-weight: 600; color: var(--ink-strong); }
+.chains .sub { color: var(--ink-2); }
+.chain-list { display: grid; gap: 32px; }
+.chain { display: grid; gap: 10px; }
+.chain h3 { font-size: 15px; line-height: 22px; font-weight: 600; color: var(--ink-strong); }
+.chain-flow { display: flex; align-items: center; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: thin; }
+.edge { flex: none; width: 36px; height: 2px; background: var(--line-strong); position: relative; }
+.edge::after { content: ""; position: absolute; right: -5px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line-strong); box-sizing: border-box; }
+.mn { flex: 0 0 auto; width: 196px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; transition: border-color .2s; }
+button.mn:hover { border-color: var(--primary); }
+.mn-h { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 13px; line-height: 20px; font-weight: 500; color: var(--ink-strong); }
+.mn-h .ic { color: var(--ink-2); }
+.mn-b { display: flex; align-items: center; gap: 6px; padding: 8px 12px; font-size: 13px; line-height: 20px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mn-b .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.mn-b .star { margin-left: 0; }
+
+footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; line-height: 20px; color: var(--ink-3); }
+
+/* ---------- Tooltip & toast ---------- */
+.tip { position: fixed; z-index: 50; max-width: 240px; padding: 6px 8px; border-radius: 6px; background: var(--tip-bg); color: var(--tip-ink); font-size: 13px; line-height: 20px; box-shadow: var(--shadow-pop); pointer-events: none; }
+.tip b { font-weight: 600; }
+.tip .src { opacity: .7; }
+.toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); transform: translate(-50%, 12px); opacity: 0; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-pop); font-size: 14px; color: var(--ink-strong); pointer-events: none; transition: opacity .2s, transform .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast .ic { color: var(--ok); }
+
+@media (max-width: 520px) {
+  .page { padding-inline: 16px; padding-block: 28px 48px; }
+  h1 { font-size: 26px; line-height: 34px; }
+  .rt { font-size: 18px; line-height: 26px; }
+  .mc-cover { padding-right: 96px; min-height: 140px; }
+  .mc-emblem { width: 72px; height: 72px; right: 16px; top: 48px; }
+  .mc-emblem-ic { width: 52px; height: 52px; right: 20px; font-size: 22px; }
+  .mc-facts div { padding: 10px 10px 10px 14px; }
+  .mc-facts div + div { padding-left: 10px; }
+  .mc-body { padding: 14px 14px 16px; }
+  .mc-use { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+
+<div class="page">
+  <header class="hero">
+    <p class="eyebrow">Noodles · Model guide</p>
+    <h1>Which model should I use?</h1>
+    <p class="lede" id="lede">Pick what you’re making. Stars mark the best models. Click any model to open its card.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="seg" role="tablist" aria-label="Medium" id="tabs"></div>
+    <div class="search">
+      <span id="search-ic"></span>
+      <input id="find" type="text" autocomplete="off" spellcheck="false" placeholder="What are you making?"
+        role="combobox" aria-label="What are you making?" aria-autocomplete="list" aria-expanded="false" aria-controls="find-list">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="listbox" id="find-list" role="listbox" aria-label="Suggestions" hidden></ul>
+    </div>
+  </div>
+
+  <main id="panel" role="tabpanel"></main>
+
+  <section class="chains" aria-labelledby="chains-h">
+    <div>
+      <h2 id="chains-h">Common chains</h2>
+      <p class="sub">How the nodes connect for a few everyday jobs. Click a node to open its card.</p>
+    </div>
+    <div id="chains" class="chain-list"></div>
+  </section>
+
+  <footer>Rankings follow the team’s guidance and the arena.ai leaderboards for image, image editing and video, October 2026. Use cases come from the Noodles presets and real runs. Times, costs and limits come from the model catalog and test runs, October 2026.</footer>
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-ic"></span><span id="toast-msg"></span></div>
+
+<script>
+const ICONS = {"PictureOutlined":{"vb":"64 64 896 896","ds":["M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136v-39.9l138.5-164.3 150.1 178L658.1 489 888 761.6V792zm0-129.8L664.2 396.8c-3.2-3.8-9-3.8-12.2 0L424.6 666.4l-144-170.7c-3.2-3.8-9-3.8-12.2 0L136 652.7V232h752v430.2zM304 456a88 88 0 100-176 88 88 0 000 176zm0-116c15.5 0 28 12.5 28 28s-12.5 28-28 28-28-12.5-28-28 12.5-28 28-28z"]},"VideoCameraOutlined":{"vb":"64 64 896 896","ds":["M912 302.3L784 376V224c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v576c0 35.3 28.7 64 64 64h592c35.3 0 64-28.7 64-64V648l128 73.7c21.3 12.3 48-3.1 48-27.6V330c0-24.6-26.7-40-48-27.7zM712 792H136V232h576v560zm176-167l-104-59.8V458.9L888 399v226zM208 360h112c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H208c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8z"]},"MessageOutlined":{"vb":"64 64 896 896","ds":["M464 512a48 48 0 1096 0 48 48 0 10-96 0zm200 0a48 48 0 1096 0 48 48 0 10-96 0zm-400 0a48 48 0 1096 0 48 48 0 10-96 0zm661.2-173.6c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 00-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 00-142 96.5c-40.9 41.3-73 89.3-95.2 142.8-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 00112 714v152a46 46 0 0046 46h152.1A449.4 449.4 0 00510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 00142.8-95.2c41.3-40.9 73.8-88.7 96.5-142 23.6-55.2 35.6-113.9 35.9-174.5.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8 69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9 44.6 18.7 84.6 45.6 119 80 34.3 34.3 61.3 74.4 80 119 19.4 46.2 29.1 95.2 28.9 145.8-.6 99.6-39.7 192.9-110.1 262.7z"]},"SoundOutlined":{"vb":"64 64 896 896","ds":["M625.9 115c-5.9 0-11.9 1.6-17.4 5.3L254 352H90c-8.8 0-16 7.2-16 16v288c0 8.8 7.2 16 16 16h164l354.5 231.7c5.5 3.6 11.6 5.3 17.4 5.3 16.7 0 32.1-13.3 32.1-32.1V147.1c0-18.8-15.4-32.1-32.1-32.1zM586 803L293.4 611.7l-18-11.7H146V424h129.4l17.9-11.7L586 221v582zm348-327H806c-8.8 0-16 7.2-16 16v40c0 8.8 7.2 16 16 16h128c8.8 0 16-7.2 16-16v-40c0-8.8-7.2-16-16-16zm-41.9 261.8l-110.3-63.7a15.9 15.9 0 00-21.7 5.9l-19.9 34.5c-4.4 7.6-1.8 17.4 5.8 21.8L856.3 800a15.9 15.9 0 0021.7-5.9l19.9-34.5c4.4-7.6 1.7-17.4-5.8-21.8zM760 344a15.9 15.9 0 0021.7 5.9L892 286.2c7.6-4.4 10.2-14.2 5.8-21.8L878 230a15.9 15.9 0 00-21.7-5.9L746 287.8a15.99 15.99 0 00-5.8 21.8L760 344z"]},"CustomerServiceOutlined":{"vb":"64 64 896 896","ds":["M512 128c-212.1 0-384 171.9-384 384v360c0 13.3 10.7 24 24 24h184c35.3 0 64-28.7 64-64V624c0-35.3-28.7-64-64-64H200v-48c0-172.3 139.7-312 312-312s312 139.7 312 312v48H688c-35.3 0-64 28.7-64 64v208c0 35.3 28.7 64 64 64h184c13.3 0 24-10.7 24-24V512c0-212.1-171.9-384-384-384zM328 632v192H200V632h128zm496 192H696V632h128v192z"]},"HighlightOutlined":{"vb":"64 64 896 896","ds":["M957.6 507.4L603.2 158.2a7.9 7.9 0 00-11.2 0L353.3 393.4a8.03 8.03 0 00-.1 11.3l.1.1 40 39.4-117.2 115.3a8.03 8.03 0 00-.1 11.3l.1.1 39.5 38.9-189.1 187H72.1c-4.4 0-8.1 3.6-8.1 8V860c0 4.4 3.6 8 8 8h344.9c2.1 0 4.1-.8 5.6-2.3l76.1-75.6 40.4 39.8a7.9 7.9 0 0011.2 0l117.1-115.6 40.1 39.5a7.9 7.9 0 0011.2 0l238.7-235.2c3.4-3 3.4-8 .3-11.2zM389.8 796.2H229.6l134.4-133 80.1 78.9-54.3 54.1zm154.8-62.1L373.2 565.2l68.6-67.6 171.4 168.9-68.6 67.6zM713.1 658L450.3 399.1 597.6 254l262.8 259-147.3 145z"]},"ScissorOutlined":{"vb":"64 64 896 896","ds":["M567.1 512l318.5-319.3c5-5 1.5-13.7-5.6-13.7h-90.5c-2.1 0-4.2.8-5.6 2.3l-273.3 274-90.2-90.5c12.5-22.1 19.7-47.6 19.7-74.8 0-83.9-68.1-152-152-152s-152 68.1-152 152 68.1 152 152 152c27.7 0 53.6-7.4 75.9-20.3l90 90.3-90.1 90.3A151.04 151.04 0 00288 582c-83.9 0-152 68.1-152 152s68.1 152 152 152 152-68.1 152-152c0-27.2-7.2-52.7-19.7-74.8l90.2-90.5 273.3 274c1.5 1.5 3.5 2.3 5.6 2.3H880c7.1 0 10.7-8.6 5.6-13.7L567.1 512zM288 370c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80zm0 444c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"]},"UploadOutlined":{"vb":"64 64 896 896","ds":["M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"]},"UnorderedListOutlined":{"vb":"64 64 896 896","ds":["M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z"]},"ExpandOutlined":{"vb":"64 64 896 896","ds":["M342 88H120c-17.7 0-32 14.3-32 32v224c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16V168h174c8.8 0 16-7.2 16-16v-48c0-8.8-7.2-16-16-16zm578 576h-48c-8.8 0-16 7.2-16 16v176H682c-8.8 0-16 7.2-16 16v48c0 8.8 7.2 16 16 16h222c17.7 0 32-14.3 32-32V680c0-8.8-7.2-16-16-16zM342 856H168V680c0-8.8-7.2-16-16-16h-48c-8.8 0-16 7.2-16 16v224c0 17.7 14.3 32 32 32h222c8.8 0 16-7.2 16-16v-48c0-8.8-7.2-16-16-16zM904 88H682c-8.8 0-16 7.2-16 16v48c0 8.8 7.2 16 16 16h174v176c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16V120c0-17.7-14.3-32-32-32z"]},"AudioOutlined":{"vb":"64 64 896 896","ds":["M842 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 140.3-113.7 254-254 254S258 594.3 258 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 168.7 126.6 307.9 290 327.6V884H326.7c-13.7 0-24.7 14.3-24.7 32v36c0 4.4 2.8 8 6.2 8h407.6c3.4 0 6.2-3.6 6.2-8v-36c0-17.7-11-32-24.7-32H548V782.1c165.3-18 294-158 294-328.1zM512 624c93.9 0 170-75.2 170-168V232c0-92.8-76.1-168-170-168s-170 75.2-170 168v224c0 92.8 76.1 168 170 168zm-94-392c0-50.6 41.9-92 94-92s94 41.4 94 92v224c0 50.6-41.9 92-94 92s-94-41.4-94-92V232z"]},"FileTextOutlined":{"vb":"64 64 896 896","ds":["M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM504 618H320c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM312 490v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H320c-4.4 0-8 3.6-8 8z"]},"UserOutlined":{"vb":"64 64 896 896","ds":["M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"]},"BgColorsOutlined":{"vb":"64 64 896 896","ds":["M766.4 744.3c43.7 0 79.4-36.2 79.4-80.5 0-53.5-79.4-140.8-79.4-140.8S687 610.3 687 663.8c0 44.3 35.7 80.5 79.4 80.5zm-377.1-44.1c7.1 7.1 18.6 7.1 25.6 0l256.1-256c7.1-7.1 7.1-18.6 0-25.6l-256-256c-.6-.6-1.3-1.2-2-1.7l-78.2-78.2a9.11 9.11 0 00-12.8 0l-48 48a9.11 9.11 0 000 12.8l67.2 67.2-207.8 207.9c-7.1 7.1-7.1 18.6 0 25.6l255.9 256zm12.9-448.6l178.9 178.9H223.4l178.8-178.9zM904 816H120c-4.4 0-8 3.6-8 8v80c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-80c0-4.4-3.6-8-8-8z"]},"VideoCameraAddOutlined":{"vb":"64 64 896 896","ds":["M368 724H252V608c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v116H72c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h116v116c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V788h116c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8z","M912 302.3L784 376V224c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v352h72V232h576v560H448v72h272c35.3 0 64-28.7 64-64V648l128 73.7c21.3 12.3 48-3.1 48-27.6V330c0-24.6-26.7-40-48-27.7zM888 625l-104-59.8V458.9L888 399v226z","M320 360c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H208c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h112z"]},"CopyOutlined":{"vb":"64 64 896 896","ds":["M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32zM704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"]},"SearchOutlined":{"vb":"64 64 896 896","ds":["M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"]},"CheckOutlined":{"vb":"64 64 896 896","ds":["M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"]},"ToolOutlined":{"vb":"64 64 896 896","ds":["M876.6 239.5c-.5-.9-1.2-1.8-2-2.5-5-5-13.1-5-18.1 0L684.2 409.3l-67.9-67.9L788.7 169c.8-.8 1.4-1.6 2-2.5 3.6-6.1 1.6-13.9-4.5-17.5-98.2-58-226.8-44.7-311.3 39.7-67 67-89.2 162-66.5 247.4l-293 293c-3 3-2.8 7.9.3 11l169.7 169.7c3.1 3.1 8.1 3.3 11 .3l292.9-292.9c85.5 22.8 180.5.7 247.6-66.4 84.4-84.5 97.7-213.1 39.7-311.3zM786 499.8c-58.1 58.1-145.3 69.3-214.6 33.6l-8.8 8.8-.1-.1-274 274.1-79.2-79.2 230.1-230.1s0 .1.1.1l52.8-52.8c-35.7-69.3-24.5-156.5 33.6-214.6a184.2 184.2 0 01144-53.5L537 318.9a32.05 32.05 0 000 45.3l124.5 124.5a32.05 32.05 0 0045.3 0l132.8-132.8c3.7 51.8-14.4 104.8-53.6 143.9z"]},"ClockCircleOutlined":{"vb":"64 64 896 896","ds":["M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z","M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"]},"ArrowRightOutlined":{"vb":"64 64 896 896","ds":["M869 487.8L491.2 159.9c-2.9-2.5-6.6-3.9-10.5-3.9h-88.5c-7.4 0-10.8 9.2-5.2 14l350.2 304H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h585.1L386.9 854c-5.6 4.9-2.2 14 5.2 14h91.5c1.9 0 3.8-.7 5.2-2L869 536.2a32.07 32.07 0 000-48.4z"]},"TableOutlined":{"vb":"64 64 896 896","ds":["M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 208H676V232h212v136zm0 224H676V432h212v160zM412 432h200v160H412V432zm200-64H412V232h200v136zm-476 64h212v160H136V432zm0-200h212v136H136V232zm0 424h212v136H136V656zm276 0h200v136H412V656zm476 136H676V656h212v136z"]},"BulbOutlined":{"vb":"64 64 896 896","ds":["M632 888H392c-4.4 0-8 3.6-8 8v32c0 17.7 14.3 32 32 32h192c17.7 0 32-14.3 32-32v-32c0-4.4-3.6-8-8-8zM512 64c-181.1 0-328 146.9-328 328 0 121.4 66 227.4 164 284.1V792c0 17.7 14.3 32 32 32h264c17.7 0 32-14.3 32-32V676.1c98-56.7 164-162.7 164-284.1 0-181.1-146.9-328-328-328zm127.9 549.8L604 634.6V752H420V634.6l-35.9-20.8C305.4 568.3 256 484.5 256 392c0-141.4 114.6-256 256-256s256 114.6 256 256c0 92.5-49.4 176.3-128.1 221.8z"]},"RightOutlined":{"vb":"64 64 896 896","ds":["M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z"]},"AlignLeftOutlined":{"vb":"64 64 896 896","ds":["M120 230h496c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm0 424h496c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm784 140H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-424H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8z"]},"DownOutlined":{"vb":"64 64 896 896","ds":["M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"]},"CloseOutlined":{"vb":"64 64 896 896","ds":["M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"]},"StarFilled":{"vb":"64 64 896 896","ds":["M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"]}};
+
+/* ===================== Data ===================== */
+const NODES = {
+  prompt:    { label: 'Prompt', icon: 'MessageOutlined', key: 'P' },
+  image:     { label: 'Image', icon: 'PictureOutlined', key: 'I' },
+  video:     { label: 'Video', icon: 'VideoCameraOutlined', key: 'V' },
+  music:     { label: 'Music', icon: 'CustomerServiceOutlined', key: 'A' },
+  tts:       { label: 'Text to Speech', icon: 'SoundOutlined', key: 'S' },
+  upload:    { label: 'Upload', icon: 'UploadOutlined', key: 'U' },
+  batch:     { label: 'Batch', icon: 'UnorderedListOutlined', key: 'K' },
+  merge:     { label: 'Merge Audio+Video', icon: 'AudioOutlined', key: 'M' },
+  trim:      { label: 'Trim Video', icon: 'ScissorOutlined', key: 'R' },
+  removeBg:  { label: 'Remove Video BG', icon: 'BgColorsOutlined', key: 'B' },
+  lipSync:   { label: 'Lip Sync', icon: 'UserOutlined', key: 'L' },
+  editImage: { label: 'Edit Image', icon: 'HighlightOutlined', key: 'E' },
+  outpaint:  { label: 'Smart Outpaint', icon: 'ExpandOutlined', key: 'O' },
+  caption:   { label: 'Video Caption', icon: 'FileTextOutlined', key: 'C' },
+};
+
+/* Real prompts from the presets (library/workflows) and team runs, brand names removed. */
+const P = {
+  ecomShot: 'Professional e-commerce product photograph, isolated on pure white background, single garment laid flat or ghost mannequin style, crisp studio lighting, no model, no shadows except subtle contact shadow beneath item, product photography style, sharp focus on fabric texture and construction details, color-accurate representation, perfectly centered composition, clothing item shown from front view, clean seamless white backdrop, commercial catalog quality, high resolution product shot',
+  ecomWalk: 'Professional fashion e-commerce video, single model walking toward camera in clean white studio, seamless white cyclorama backdrop. The sequence begins with model standing at back of studio then walking forward confidently, natural relaxed gait, arms swinging gently, model stops at center mark and performs slow turn to showcase all angles of outfit, pauses briefly facing camera, soft even studio lighting throughout, no harsh shadows, commercial fashion video style, smooth camera work, neutral color grading, clean minimal aesthetic, professional model movement, outfit clearly visible at all times, full body in frame from head to toe including footwear. Preserve exact product details. No changes to color, shape or logo.',
+  fiveIdeas: '5 visual ideas for your product',
+  inUse: 'Create professional advertising photoshoot image prompt using the model holding the product.',
+  typeAd: 'Minimal skincare ad. Solid coconut-peach (#F8DACB) background. The jar from the reference centred with generous space around it, soft shadow. The brand wordmark, copied exactly from the jar, small in the top-left corner in tangerine (#E58653). Below the jar the headline "Nourish your glow" in a bold high-contrast serif like Playfair Display, tangerine (#E58653), and a small rounded tangerine button reading SHOP NOW in white sans-serif. No other text.',
+  candid: 'The woman from the second reference holds the jar from the first reference beside her cheek, label readable and unchanged. Intimate, natural moment at home, soft afternoon window light, warm brown and peach tones, bare shoulders, light-beige wall. Candid 35mm film look, true skin texture, not retouched.',
+  dancer: 'A woman with her hair in a loose bun, wearing a tangerine linen dress, sways and dances freely in place, smiling, full body in frame. Static camera, plain warm-white wall behind her, soft natural daylight.',
+  omniEdit: 'Change the car to metallic blue. Keep everything else the same.',
+  omniRefs: 'Around a twilight campfire in a single unbroken scene, the character shown in <IMAGE_REF_0> is wearing the item shown in <IMAGE_REF_1>. They smile as embers drift into the evening sky. No dialogue.',
+  omniFrame: 'The scene comes to life from this opening frame: slow, natural motion and a gentle camera push-in. One unbroken shot, no scene cuts.',
+  macro: 'Top-down macro of a dollop of white face cream on a coconut-peach surface being swirled into a smooth smear by a fingertip. Natural light, gentle leaf shadows drifting across the frame.',
+  orbit: 'The camera arcs slowly around the jar while the window light warms, leaf shadows moving across the peach backdrop.',
+  roots: 'Dried ashwagandha root and sliced reishi mushroom arranged on tangerine linen. Soft afternoon light, shadows of leaves sway slowly across the fabric. Wide static shot, warm brown tones.',
+  applying: 'She slowly smooths the cream into her cheek with two fingers, then lowers her hand and smiles softly at the camera. Natural light, static camera, subtle movement.',
+  heroMotion: 'Write a video motion prompt for this product hero image. Focus on subtle, premium movement: a slow camera push-in or gentle orbit, light caustics shifting across the surface, soft depth-of-field rack, and atmospheric particles or steam if appropriate. Keep it grounded — no flying objects or surreal transitions.',
+  heroShot: 'Create a premium product hero shot prompt for this product. The image should feel like a high-end e-commerce campaign — elevated lighting, a clean or contextual backdrop, and the product as the undeniable focal point.',
+  heroMusic: 'Based on this hero image, suggest a short music style for an 8-second ad. Consider whether the product calls for: ambient piano, cinematic strings, warm lo-fi, or modern electronic. Describe tempo, energy arc, and key instruments.',
+  ugc: 'influencer showing off a product they love, casual authentic testimonial:',
+  bgIdeas: 'Analyze this product and suggest a premium background scene. Consider: the product category, target market, seasonal themes, and brand positioning. Describe a scene that enhances the product appeal with specific details about lighting, textures, colors, and atmosphere.',
+  watchMusic: 'Watch this video. Write ONE concise Lyria 3 music generation prompt for background music that fits the pacing, subject, and mood. Include genre, approximate BPM, 2–4 instruments or textures, and a short mood arc. The result must be instrumental only — end the prompt with exactly: Instrumental only, no vocals.',
+  voiceLine: 'I’ve been using the deep nourishing cream every morning. Ashwagandha and reishi, and my skin just feels soft all day.',
+  morningBed: 'Warm, minimal morning track for a skincare ad. Soft nylon-string guitar, light felt piano, gentle brushed percussion, intimate and calm, 80 BPM. Instrumental only.',
+};
+
+/*
+ * Rows are ordered best first. `best` marks the starred model of a tab.
+ * Profiles score each axis 1-5 in axis order. Axes with m: true start from the
+ * model catalog and are adjusted by team use; the others are team ratings.
+ * uses[].kind: preset (in the Presets tab), run (a real team prompt), example (written here).
+ * A flow entry ending in * is the node this card is about.
+ */
+const TABS = [
+  {
+    id: 'image', label: 'Image', icon: 'PictureOutlined', node: 'image',
+    hint: 'GPT Image 2.5 gives the best results. Nano Banana 2.1 is the best alternative.',
+    axes: [
+      { k: 'speed', l: 'Speed', m: true, h: 'How quickly one image comes back.' },
+      { k: 'type', l: 'Text in\nimage', h: 'Headlines and prices that come out spelled right.' },
+      { k: 'real', l: 'Realism', h: 'People, food, materials and light that look photographed.' },
+      { k: 'product', l: 'Product\naccuracy', h: 'Keeps your product true to its photos.' },
+      { k: 'edit', l: 'Edits', h: 'Changes one thing and leaves the rest alone.' },
+      { k: 'formats', l: 'Formats', m: true, h: 'How many sizes and shapes it can make.' },
+    ],
+    series: ['flare', 'sunburst', 'nb2', 'nbpro'],
+    rows: [
+      { id: 'flare', series: 'flare', model: 'GPT Image 2.5 Flare', setting: 'Medium', best: 'Best image model',
+        desc: 'Best for everyday work: sharp text, quick results.',
+        profile: [4.5, 5, 4.5, 4.5, 4.5, 4], tips: { speed: 'About 10 s at Medium', formats: 'Any size up to 3840 px' },
+        facts: [['~10 s', 'Ready at Medium'], ['≈1¢', 'Per image'], ['16', 'Reference images']],
+        uses: [
+          { t: 'Typographic ad', kind: 'run', flow: ['upload', 'image*'], line: 'Product, headline and button in one image, with brand colors given as hex codes.', from: 'Image node prompt', fields: [['Quality', 'Medium'], ['Aspect Ratio', '1:1']], prompt: P.typeAd },
+          { t: 'Headline on a photo', kind: 'example', flow: ['image*'], line: 'A product shot with the campaign line set in the image.', from: 'Image node prompt', fields: [['Quality', 'Medium'], ['Aspect Ratio', '4:5']], prompt: 'Social ad, 4:5. A bright yellow running shoe mid-stride over wet city asphalt at night, neon reflections. Headline at the top in bold white sans-serif: “RUN THE CITY”. Small text bottom right: “Shop now”.' },
+        ] },
+      { id: 'sunburst', series: 'sunburst', model: 'GPT Image 2.5 Sunburst', setting: 'High', best: 'Best image model',
+        desc: 'Best for finals and client edits: every detail kept, at full size.',
+        profile: [2.5, 5, 5, 5, 5, 4], tips: { speed: 'About 40 s at High, 50 s at 4K', formats: 'Any size up to 3840 px' },
+        facts: [['~40 s', 'Ready at High'], ['≈6¢', 'Per image'], ['≈19¢', 'Per 4K image']],
+        uses: [
+          { t: 'Final typographic ad', kind: 'run', flow: ['upload', 'image*'], line: 'The same ad prompt the team ran on Flare, rendered for sign-off.', from: 'Image node prompt', fields: [['Quality', 'High'], ['Aspect Ratio', '1:1']], prompt: P.typeAd },
+          { t: 'Client edit', kind: 'example', flow: ['upload', 'image*'], line: 'Connect the approved photo, describe one change, and keep every other detail.', from: 'Image node prompt', fields: [['Quality', 'High']], prompt: 'Replace the background with a sunlit marble bathroom counter. Keep the product, its label and its shadow exactly as they are.' },
+          { t: 'Campaign key visual', kind: 'example', flow: ['image*'], line: 'A hero image with one serif headline, at full size.', from: 'Image node prompt', fields: [['Quality', 'High'], ['Resolution', '4K']], prompt: 'Key visual for a winter campaign: a glass perfume bottle resting on fresh snow, frost on the cap, deep blue dusk light. Serif headline centered above the bottle: “Cold Light”. No other text.' },
+        ] },
+      { id: 'nb2', series: 'nb2', model: 'Nano Banana 2.1', setting: '2K',
+        desc: 'Best alternative to GPT Image 2.5. Quick, cheap, in most presets.', badge: 'In 6 of 8 presets',
+        profile: [4.5, 4, 4, 4, 4, 5], tips: { speed: 'About 12 s at 1K, 18 s at 2K', formats: '14 shapes, including 4:1 and 8:1' },
+        facts: [['~18 s', 'Ready at 2K'], ['≈3¢', 'Per image at 1K'], ['14', 'Reference images']],
+        uses: [
+          { t: 'E-Commerce Product Video', kind: 'preset', flow: ['upload', 'image*', 'video'], line: 'A garment photo becomes a clean packshot on white, then a full outfit on your model.', from: 'Image node prompt', fields: [['Resolution', '2K'], ['Aspect Ratio', '1:1']], prompt: P.ecomShot },
+          { t: 'Product Photographer', kind: 'preset', flow: ['upload', 'prompt', 'batch', 'image*'], line: 'Gemini 3.1 Pro pitches five concepts for one product, and a Batch renders them all.', from: 'Prompt node instruction', fields: [['Resolution', '2K'], ['Aspect Ratio', '1:1']], prompt: P.fiveIdeas },
+          { t: 'Product in Use', kind: 'preset', flow: ['upload', 'prompt', 'image*'], line: 'A model photo and a product photo become an ad shoot of the model holding it.', from: 'Prompt node instruction', fields: [['Resolution', '2K'], ['Aspect Ratio', '1:1']], prompt: P.inUse },
+        ] },
+      { id: 'nbpro', series: 'nbpro', model: 'Nano Banana Pro', setting: '2K',
+        desc: 'People and products in one shot, from their photos.',
+        profile: [2, 3.5, 3.5, 3.5, 3.5, 3.5], tips: { speed: 'About 40 s at 2K', formats: '10 shapes' },
+        facts: [['~40 s', 'Ready at 2K'], ['4K', 'Max size'], ['14', 'Reference images']],
+        uses: [
+          { t: 'Person with product', kind: 'run', flow: ['upload', 'upload', 'image*'], line: 'A portrait and a product photo, combined into one candid moment.', from: 'Image node prompt', fields: [['Resolution', '1K'], ['Aspect Ratio', '4:5']], prompt: P.candid },
+          { t: 'Product in a new scene', kind: 'example', flow: ['upload', 'image*'], line: 'One product photo, placed somewhere new without touching the label.', from: 'Image node prompt', fields: [['Resolution', '2K'], ['Aspect Ratio', '4:5']], prompt: 'Place the product from the reference photos on a marble bathroom counter beside a folded linen towel. Keep the label, cap shape and colors exactly as in the references. Warm window light from the left.' },
+        ] },
+    ],
+  },
+  {
+    id: 'video', label: 'Video', icon: 'VideoCameraOutlined', node: 'video',
+    hint: 'Start with Omni Flash 1.1. Switch only for a specific need.',
+    axes: [
+      { k: 'quality', l: 'Quality', h: 'How good a final render looks and moves.' },
+      { k: 'speed', l: 'Speed', m: true, h: 'How quickly an 8-second clip comes back.' },
+      { k: 'length', l: 'Length', m: true, h: 'Longest clip from one run.' },
+      { k: 'res', l: 'Resolution', m: true, h: 'Sharpest output.' },
+      { k: 'refs', l: 'References', m: true, h: 'How many images and clips you can connect.' },
+      { k: 'edit', l: 'Editing', m: true, h: 'Can it edit your clip, or make a clip longer?' },
+    ],
+    series: ['omni', 'sd25', 'sd20', 'veo'],
+    rows: [
+      { id: 'omni', series: 'omni', model: 'Omni Flash 1.1', pick: 'Omni Flash', setting: '4K', best: 'Best video model',
+        desc: 'Best overall. Use it for most videos: fast, sharp, up to 4K.', badge: 'In 1 preset',
+        profile: [5, 4.5, 3, 5, 3.5, 5], tips: { speed: 'Fast: about 1 min for 8 s', length: '3 to 10 s, and Extend adds up to 10 s more', res: 'Up to 4K', refs: '7 images and 1 clip', edit: 'Edits, reframes and extends your clip' },
+        facts: [['~1 min', 'Ready, 8 s clip'], ['4K', 'Max size'], ['+3–10 s', 'Extend']],
+        uses: [
+          { t: 'Edit chain', kind: 'preset', preset: 'Omni Flash Playground', flow: ['video*', 'video*', 'video*'], line: 'Draft at 360p, then edit the same clip twice: a new car color, then dusk light.', from: 'Prompt on the second Video node', fields: [['Resolution', '360p, then 720p, then 1080p'], ['Length', '8 s']], prompt: P.omniEdit },
+          { t: 'Tagged references', kind: 'preset', preset: 'Omni Flash Playground', flow: ['upload', 'upload', 'video*'], line: 'Name each connected image in the prompt, like <IMAGE_REF_0>, to say what goes where.', from: 'Video node prompt', fields: [['Resolution', '720p'], ['Length', '8 s']], prompt: P.omniRefs },
+          { t: 'Starting frame', kind: 'preset', preset: 'Omni Flash Playground', flow: ['upload', 'video*'], line: 'Bring a still image to life from its first frame.', from: 'Video node prompt', fields: [['Resolution', '720p'], ['Length', '8 s']], prompt: P.omniFrame },
+        ] },
+      { id: 'sd25', series: 'sd25', model: 'Seedance 2.5', setting: '30 s',
+        desc: 'Top-tier quality and the most references. Very slow.',
+        profile: [4.5, 1.5, 5, 3, 5, 4.5], tips: { speed: 'Very slow', length: 'Up to 30 s', res: 'Up to 1080p', refs: '30 images and 10 clips', edit: 'Extends by exact seconds' },
+        facts: [['Very slow', 'Wait'], ['30 s', 'Max length'], ['30 + 10', 'Images + clips']],
+        uses: [
+          { t: 'Orbit a still', kind: 'run', flow: ['image', 'video*'], line: 'A generated product still, animated with a slow camera arc.', from: 'Video node prompt', fields: [['Resolution', '480p'], ['Length', '4 s']], prompt: P.orbit },
+          { t: 'Ingredient still life', kind: 'run', flow: ['video*'], line: 'A calm text-to-video shot of raw ingredients.', from: 'Video node prompt', fields: [['Resolution', '480p'], ['Length', '4 s']], prompt: P.roots },
+          { t: '20-second story', kind: 'example', flow: ['upload', 'video*'], line: 'Three shots, one character, one clip.', from: 'Video node prompt', fields: [['Resolution', '720p'], ['Length', '20 s']], prompt: 'A 20-second morning routine in a bright apartment. Shot 1: she stretches by the window. Shot 2: she pours tea from the kettle in the references. Shot 3: she grabs her bag and leaves.' },
+        ] },
+      { id: 'sd20', series: 'sd20', model: 'Seedance 2.0', setting: '1080p',
+        desc: 'Square and wide formats, built from many references.',
+        profile: [4.5, 3.7, 3.5, 5, 4, 2.5], tips: { speed: 'About 1 min 15 s', length: 'Up to 15 s', res: 'Up to 4K', refs: '9 images and 3 clips', edit: 'Uses clips as references' },
+        facts: [['~2 min', 'Ready at 1080p'], ['15 s', 'Max length'], ['6', 'Frame shapes']],
+        uses: [
+          { t: 'Texture macro', kind: 'run', flow: ['video*'], line: 'A top-down cream texture shot at the cheapest setting: 480p, 4 seconds.', from: 'Video node prompt', fields: [['Resolution', '480p'], ['Length', '4 s']], prompt: P.macro },
+          { t: 'Square product spin', kind: 'example', flow: ['upload', 'video*'], line: 'A 1:1 feed video from a few product photos.', from: 'Video node prompt', fields: [['Resolution', '1080p'], ['Length', '10 s']], prompt: 'Square 1:1. The sneaker from the reference images spins slowly on a pastel turntable, then cut to a close-up of the sole. Clean studio light.' },
+        ] },
+      { id: 'veo-frames', series: 'veo', model: 'Veo 3.1 Frames', setting: '1080p',
+        desc: 'Animate from a first frame to a last frame.',
+        profile: [3.5, 1.6, 2, 5, 1.5, 3], tips: { speed: 'About 2 min', length: 'Up to 8 s', res: 'Up to 4K', refs: 'First and last frame', edit: 'Can be extended' },
+        facts: [['~3 min', 'Ready at 1080p'], ['8 s', 'Max length'], ['2', 'Frames in']],
+        uses: [
+          { t: 'Animate a photo', kind: 'run', flow: ['upload', 'video*'], line: 'A photo of someone applying cream, brought to life on the Fast version.', from: 'Video node prompt', fields: [['Model', 'Veo 3.1 Frames (Fast)'], ['Resolution', '720p'], ['Length', '4 s']], prompt: P.applying },
+          { t: 'Product reveal', kind: 'example', flow: ['upload', 'upload', 'video*'], line: 'A closed box in the first frame, the product in the last.', from: 'Video node prompt', fields: [['Resolution', '1080p'], ['Length', '8 s']], prompt: 'Smooth orbit from the closed gift box in the first frame to the open box with the watch revealed in the last frame. Soft studio light.' },
+        ] },
+      { id: 'veo-hero', series: 'veo', model: 'Veo 3.1', setting: '4K',
+        desc: 'Built-in sound, for shots that need it.', badge: 'In 3 presets',
+        profile: [3.5, 1.6, 2, 5, 2, 3], tips: { speed: 'Slow: about 6 min at 4K', length: '8 s', res: 'Up to 4K', refs: 'Up to 3 images', edit: 'Can be extended' },
+        facts: [['~6 min', 'Ready at 4K'], ['8 s', 'Length'], ['Sound', 'Built in']],
+        uses: [
+          { t: 'Product Hero Video', kind: 'preset', flow: ['upload', 'image', 'video*', 'merge'], line: 'Product photo to hero image to an 8-second 9:16 clip, with music merged on.', from: 'Prompt node instruction: GPT-6 Sol writes the motion prompt', fields: [['Length', '8 s']], prompt: P.heroMotion },
+          { t: 'E-Commerce Product Video', kind: 'preset', flow: ['upload', 'image', 'video*'], line: 'A full-outfit image becomes a 9:16 runway walk in a white studio.', from: 'Video node prompt', fields: [['Length', '8 s']], prompt: P.ecomWalk },
+          { t: 'UGC-Style Video', kind: 'preset', flow: ['upload', 'image', 'video*'], line: 'A selfie-style frame becomes a talking testimonial, on Veo 3.1 Ingredients.', from: 'Prompt node instruction: Gemini 3.1 Pro writes the video prompt', fields: [['Model', 'Veo 3.1 Ingredients'], ['Resolution', '720p'], ['Length', '8 s']], prompt: P.ugc },
+        ] },
+      { id: 'veo-fast', series: 'veo', model: 'Veo 3.1 Fast', pick: 'Veo 3.1 (Fast)', setting: '720p',
+        desc: 'Quick, lower-cost motion tests.',
+        profile: [3.5, 4.5, 2, 5, 2, 3], tips: { speed: 'About 1 min', length: 'Up to 8 s', res: 'Up to 4K', refs: 'Up to 3 images', edit: 'Can be extended' },
+        facts: [['~1 min', 'Ready at 720p'], ['8 s', 'Max length'], ['3', 'Reference images']],
+        uses: [
+          { t: 'Motion test', kind: 'run', flow: ['video*', 'removeBg'], line: 'A 4-second full-body dance clip, later cut out with Remove Video BG.', from: 'Video node prompt', fields: [['Resolution', '720p'], ['Length', '4 s']], prompt: P.dancer },
+          { t: 'Camera move', kind: 'example', flow: ['video*'], line: 'Check a dolly-in before you pay for the final.', from: 'Video node prompt', fields: [['Resolution', '720p'], ['Length', '8 s']], prompt: 'Slow dolly-in on a steaming coffee cup on a café counter, morning light through the window, shallow depth of field, soft café sounds.' },
+        ] },
+    ],
+  },
+  {
+    id: 'text', label: 'Text', icon: 'MessageOutlined', node: 'prompt',
+    hint: 'Gemini 3.8 Flash understands your files best. GPT-6 Sol is the default writer.',
+    axes: [
+      { k: 'copy', l: 'Copywriting', h: 'Headlines, taglines and body copy in a set voice.' },
+      { k: 'prompts', l: 'Prompts', h: 'Writing prompts for Image and Video nodes.' },
+      { k: 'reason', l: 'Reasoning', h: 'Working through long briefs and tricky asks.' },
+      { k: 'speed', l: 'Speed', m: true, h: 'How quickly the answer comes back.' },
+      { k: 'cost', l: 'Low cost', m: true, h: 'Price per request. Higher means cheaper.' },
+      { k: 'files', l: 'Reads\nfiles', m: true, h: 'Images, PDFs, video and audio it can understand.' },
+    ],
+    series: ['gemini', 'gpt', 'claude'],
+    rows: [
+      { id: 'flash', series: 'gemini', model: 'Gemini 3.8 Flash', best: 'Best at understanding your input',
+        desc: 'Best at understanding images, video, audio and PDFs.',
+        profile: [3.5, 4, 4, 4.5, 4.5, 5], tips: { speed: 'About 4 s', cost: 'Low', files: 'Images, PDFs, video and audio' },
+        facts: [['~4 s', 'Ready in'], ['Low', 'Cost'], ['Video & PDF', 'Reads']],
+        uses: [
+          { t: 'What’s in this clip', kind: 'example', flow: ['upload', 'prompt*'], line: 'A timestamped list of the products in a video.', from: 'Prompt node', prompt: 'Watch the connected video and list every product that appears, with the time it first shows up.' },
+          { t: 'Describe a reference', kind: 'example', flow: ['upload', 'prompt*', 'image'], line: 'Turn a reference photo into a prompt for the Image node.', from: 'Prompt node', prompt: 'Describe the connected photo as an image prompt: subject, setting, light, lens and color palette. Output only the prompt.' },
+          { t: 'Recording summary', kind: 'example', flow: ['upload', 'prompt*'], line: 'Key points from a call or a voice note.', from: 'Prompt node', prompt: 'Summarize this recording in 5 bullet points, then list every product name mentioned.' },
+        ] },
+      { id: 'sol', series: 'gpt', model: 'GPT-6 Sol',
+        desc: 'The default writer. Prompts for images, video and music.', badge: 'In 2 presets',
+        profile: [4, 4.5, 4.5, 2.5, 3, 4], tips: { speed: 'About 8 s', cost: 'Medium', files: 'Documents and images' },
+        facts: [['~8 s', 'Ready in'], ['Medium', 'Cost'], ['Docs', 'Reads']],
+        uses: [
+          { t: 'Product Hero Video', kind: 'preset', flow: ['upload', 'prompt*', 'image'], line: 'Three Prompt nodes write the hero image, motion and music prompts.', from: 'Prompt node instruction', prompt: P.heroShot },
+          { t: 'Product Background Swap', kind: 'preset', flow: ['upload', 'prompt*', 'editImage'], line: 'Looks at the product and suggests a premium background scene.', from: 'Prompt node instruction', prompt: P.bgIdeas },
+        ] },
+      { id: 'sonnet', series: 'claude', model: 'Claude Sonnet 5',
+        desc: 'Ad copy in a specific brand voice.',
+        profile: [4.5, 4.5, 4, 3.5, 3, 2], tips: { speed: 'About 5 s', cost: 'Medium', files: 'Images only, no files yet' },
+        facts: [['~5 s', 'Ready in'], ['Medium', 'Cost'], ['Images', 'Reads']],
+        uses: [
+          { t: 'Brand voice rewrite', kind: 'example', flow: ['prompt*'], line: 'Product copy, rewritten to sound like the brand.', from: 'Prompt node', prompt: 'Rewrite this product description in a warm, witty voice for a Gen-Z skincare brand. Under 40 words. Keep the SPF 50 claim exact.' },
+          { t: 'Taglines', kind: 'example', flow: ['prompt*'], line: 'A round of short lines to pick from.', from: 'Prompt node', prompt: 'Write 8 taglines for a refillable water bottle. Confident, a little playful, under 6 words each.' },
+        ] },
+      { id: 'gpro', series: 'gemini', model: 'Gemini 3.1 Pro',
+        desc: 'Turns photos and video into prompts in 4 presets.', badge: 'In 4 presets',
+        profile: [4, 4, 4.5, 1.5, 2.8, 5], tips: { speed: 'About 10 s', cost: 'Medium', files: 'Images, PDFs, video and audio' },
+        facts: [['~10 s', 'Ready in'], ['Medium', 'Cost'], ['Video & PDF', 'Reads']],
+        uses: [
+          { t: 'Video Background Music', kind: 'preset', flow: ['upload', 'prompt*', 'music', 'merge'], line: 'Watches your clip and writes a music prompt that fits it.', from: 'Prompt node instruction', prompt: P.watchMusic },
+          { t: 'Product Photographer', kind: 'preset', flow: ['upload', 'prompt*', 'batch', 'image'], line: 'Pitches five visual concepts from one product photo.', from: 'Prompt node instruction', prompt: P.fiveIdeas },
+          { t: 'Product in Use', kind: 'preset', flow: ['upload', 'prompt*', 'image'], line: 'Writes a photoshoot prompt from a model photo and a product photo.', from: 'Prompt node instruction', prompt: P.inUse },
+        ] },
+      { id: 'opus', series: 'claude', model: 'Claude Opus 5.5',
+        desc: 'Big ideas: campaign concepts and naming.',
+        profile: [5, 4.5, 5, 3, 2, 2], tips: { speed: 'About 6 s', cost: 'Highest', files: 'Images only, no files yet' },
+        facts: [['~6 s', 'Ready in'], ['Highest', 'Cost'], ['Images', 'Reads']],
+        uses: [
+          { t: 'Campaign concepts', kind: 'example', flow: ['prompt*'], line: 'Five directions, each with a name and a hero visual.', from: 'Prompt node', prompt: 'Give me 5 campaign concepts for the winter launch of a city e-bike. For each: a name, a one-line idea and a hero visual.' },
+          { t: 'Naming round', kind: 'example', flow: ['prompt*'], line: 'Names with a reason for each.', from: 'Prompt node', prompt: 'Suggest 12 names for a plant-based protein bar for runners. Mix playful and premium, with one line on each.' },
+        ] },
+      { id: 'luna', series: 'gpt', model: 'GPT-6 Luna',
+        desc: 'Lots of quick variations, like 50 headlines.',
+        profile: [3, 3.5, 2.5, 5, 5, 4], tips: { speed: 'About 3 s', cost: 'Cheapest', files: 'Documents and images' },
+        facts: [['~3 s', 'Ready in'], ['Lowest', 'Cost'], ['Docs', 'Reads']],
+        uses: [
+          { t: 'Headline variants', kind: 'example', flow: ['prompt*', 'image'], line: 'Ten takes on one line, each one feeding an image.', from: 'Prompt node', prompt: 'Write 10 variations of this headline, max 6 words each, one per line: “Coffee that keeps up with you.”' },
+          { t: 'Translate a list', kind: 'example', flow: ['batch', 'prompt*'], line: 'Every line of a Batch, localized.', from: 'Prompt node', prompt: 'Translate the connected line into French, German and Japanese. Keep each version under 40 characters.' },
+        ] },
+    ],
+  },
+  {
+    id: 'audio', label: 'Audio', icon: 'SoundOutlined',
+    hint: 'Lyria 3 Clip is best for short clips. Text to Speech handles spoken words.',
+    series: ['lyria', 'tts'],
+    rows: [
+      { id: 'clip', series: 'lyria', node: 'music', model: 'Lyria 3 Clip', best: 'Best for short clips',
+        desc: 'Best for short clips: 30-second music beds for ads.', badge: 'In 2 presets',
+        facts: [['~20 s', 'Ready in'], ['30 s', 'Length'], ['4¢', 'Per clip']],
+        uses: [
+          { t: 'Video Background Music', kind: 'preset', flow: ['upload', 'prompt', 'music*', 'merge'], line: 'Gemini watches your clip, Lyria scores it, and Merge puts it on.', from: 'Prompt node instruction: Gemini 3.1 Pro writes the music prompt', prompt: P.watchMusic },
+          { t: 'Product Hero Video', kind: 'preset', flow: ['image', 'prompt', 'music*', 'merge'], line: 'Music picked to match the hero image, merged onto the 8-second clip.', from: 'Prompt node instruction: GPT-6 Sol writes the music prompt', prompt: P.heroMusic },
+          { t: 'Morning skincare bed', kind: 'run', flow: ['music*'], line: 'A direct prompt: mood, instruments and tempo.', from: 'Music node prompt', prompt: P.morningBed },
+        ] },
+      { id: 'tts', series: 'tts', node: 'tts', model: 'Gemini 3.8 Flash TTS', noModelChip: true,
+        desc: 'Voice-overs in more than 20 languages.',
+        facts: [['~4 s', 'Ready in'], ['20+', 'Languages'], ['Kore', 'Default voice']],
+        uses: [
+          { t: 'Testimonial line', kind: 'run', flow: ['tts*', 'lipSync'], line: 'A spoken line that drives a Lip Sync clip. The style prompt sets the tone and is never read aloud.', from: 'Text', fields: [['Voice', 'Kore'], ['Style Prompt', 'Warm and relaxed, like telling a friend about something you love.']], prompt: P.voiceLine },
+          { t: 'Product read', kind: 'example', flow: ['tts*', 'merge'], line: 'A short voice-over to merge onto a clip.', from: 'Text', fields: [['Voice', 'Kore'], ['Style Prompt', 'Warm, unhurried']], prompt: 'Meet the Trail Bottle. Light enough to forget, tough enough for everything else.' },
+        ] },
+      { id: 'pro', series: 'lyria', node: 'music', model: 'Lyria 3 Pro',
+        desc: 'Full songs with vocals and lyrics.',
+        facts: [['~45 s', 'Ready in'], ['Full song', 'Length'], ['8¢', 'Per song']],
+        uses: [
+          { t: 'Brand anthem', kind: 'example', flow: ['music*', 'merge'], line: 'A full song for a longer brand film.', from: 'Music node prompt', prompt: 'Indie-pop song about summer road trips, female vocals, jangly guitars, bright and nostalgic, with a catchy chorus.' },
+        ] },
+    ],
+  },
+  { id: 'finishing', label: 'Finishing', icon: 'ToolOutlined' },
+];
+
+const FIXES = [
+  { id: 'img-cutout', group: 'image', q: 'Remove the background', node: 'editImage', fields: [['Operation', 'Remove Background'], ['HD Mode', 'On']],
+    text: 'Cuts the subject out onto a transparent PNG, with HD Mode on for clean edges. This is the only image job for the Edit Image node.' },
+  { id: 'img-bg', group: 'image', q: 'Change the background', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High']], facts: [['~40 s', 'Ready at High'], ['≈6¢', 'Per image']],
+    text: 'Connect the photo and describe the new scene. Say what has to stay the same.',
+    prompt: 'Replace the background with a sunlit marble bathroom counter. Keep the product, its label and its shadow exactly as they are.' },
+  { id: 'img-edit', group: 'image', q: 'Change one detail', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High']], facts: [['~40 s', 'Ready at High'], ['≈6¢', 'Per image']],
+    text: 'Recolor, swap or remove one thing and leave the rest alone.',
+    prompt: 'Change the bottle cap to matte black. Keep everything else exactly the same.' },
+  { id: 'img-relight', group: 'image', q: 'Fix the lighting', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High']], facts: [['~40 s', 'Ready at High'], ['≈6¢', 'Per image']],
+    text: 'Describe the light you want. The scene and the product stay put.',
+    prompt: 'Relight the scene with soft morning window light from the left. Keep the product, composition and colors the same.' },
+  { id: 'img-text', group: 'image', q: 'Remove text', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High']], facts: [['~40 s', 'Ready at High'], ['≈6¢', 'Per image']],
+    text: 'Clears text from a shot so you can reuse the image.',
+    prompt: 'Remove all text from the image. Keep everything else exactly the same.' },
+  { id: 'img-resize', group: 'image', q: 'Fit another format', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High'], ['Aspect Ratio', '9:16']], facts: [['~30 s', 'Ready at High'], ['≈4¢', 'Per image']],
+    text: 'Pick the new ratio or a custom size, connect the image, and ask for the scene to be extended.',
+    prompt: 'Extend the scene to fill a 9:16 frame. Keep the product, its position and its label unchanged.',
+    fallback: { node: 'outpaint', fields: [['Aspect Ratio', '9:16'], ['Quality', 'High (slow)']],
+      text: 'Need the original pixels untouched? Smart Outpaint keeps the image as it is and only paints new scene around the edges.' } },
+  { id: 'img-upscale', group: 'image', q: 'Make it bigger and sharper', node: 'image', model: 'GPT Image 2.5 Sunburst', fields: [['Model', 'GPT Image 2.5 Sunburst'], ['Quality', 'High'], ['Resolution', '4K']], facts: [['~50 s', 'Ready at 4K'], ['≈19¢', 'Per image']],
+    text: 'Re-renders the image at 4K with finer detail.',
+    prompt: 'Recreate this image at 4K with crisp detail. Change nothing else.' },
+  { id: 'vid-trim', group: 'video', q: 'Trim it', node: 'trim',
+    text: 'Pick a start and an end. The cut is lossless, so quality stays the same.' },
+  { id: 'vid-audio', group: 'video', q: 'Add music or a voice-over', node: 'merge',
+    text: 'Mix with the clip’s own sound or replace it, and set when it starts and how loud it is.',
+    use: { kind: 'preset', t: 'Product Hero Video', flow: ['video', 'music', 'merge*'], line: 'The hero clip and a Lyria 3 Clip track, merged into the final video.' } },
+  { id: 'vid-caption', group: 'video', q: 'Add captions', node: 'caption',
+    text: 'Transcribes the speech and adds captions you can edit and style.' },
+  { id: 'vid-bg', group: 'video', q: 'Remove the background', node: 'removeBg',
+    text: 'Keeps the subject on a transparent background, saved as WebM.',
+    use: { kind: 'run', flow: ['video', 'removeBg*'], line: 'A Veo 3.1 Fast dance clip, cut out onto a transparent background.' } },
+  { id: 'vid-lipsync', group: 'video', q: 'Make a face talk', node: 'lipSync', fields: [['Model', 'VEED Fabric 1.0'], ['Resolution', '720p']],
+    text: 'Connect a face image and an audio track, for example from Text to Speech.',
+    use: { kind: 'run', flow: ['image', 'tts', 'lipSync*'], line: 'A generated portrait and a Text to Speech line, on Fabric at 480p.' },
+    more: 'Fabric lets you pick 720p or 480p and takes up to 60 s of audio. Creatify Aurora is quicker and cheaper: a 4-second test took 65 s and $0.56, against 87 s and $0.75 on Fabric.' },
+  { id: 'vid-extend', group: 'video', q: 'Make it longer', node: 'video', noKey: true,
+    text: 'Hover a finished clip and choose Extend. Noodles adds a new Video node that outputs the longer clip.',
+    more: 'Omni Flash adds 3 to 10 s to clips up to 30 s. Veo adds about 7 s. Seedance 2.5 adds the seconds you pick. Seedance 2.0 clips can’t be extended yet.' },
+];
+
+const TASKS = [
+  { q: 'Social ad with a headline', k: 'ad headline copy text typography instagram facebook post', row: 'flare' },
+  { q: 'Final key visual', k: 'hero final key visual print poster 4k best quality', row: 'sunburst' },
+  { q: 'Packshot on white', k: 'packshot ecommerce product shot white background catalog garment', row: 'nb2' },
+  { q: 'Moodboard or quick drafts', k: 'explore ideas concept quick draft moodboard variations cheap', row: 'nb2' },
+  { q: 'Person holding a product', k: 'product model person lifestyle holding composite place scene', row: 'nbpro' },
+  { q: 'Most videos', k: 'video default story reel tiktok vertical 9:16 16:9 4k fast', row: 'omni' },
+  { q: 'Edit or reframe a video', k: 'restyle reframe edit existing footage clip resize convert recolor extend', row: 'omni' },
+  { q: 'Best quality video', k: 'top quality premium many references long 30 seconds', row: 'sd25' },
+  { q: 'Square video (1:1)', k: 'square 1:1 feed 3:4 4:3 21:9 video', row: 'sd20' },
+  { q: 'Product reveal', k: 'start end frame transition reveal animate still image to video', row: 'veo-frames' },
+  { q: 'Video with sound', k: 'sound audio dialogue hero product video', row: 'veo-hero' },
+  { q: 'Understand a video, image or PDF', k: 'summarize video audio transcript watch listen recording describe image pdf understand analyze', row: 'flash' },
+  { q: 'Write a prompt for an image or video', k: 'prompt write describe', row: 'sol' },
+  { q: 'Headlines and ad copy', k: 'copy tagline headline write slogan tone voice', row: 'sonnet' },
+  { q: 'Campaign concepts', k: 'concept campaign naming idea strategy', row: 'opus' },
+  { q: 'Lots of headline variations', k: 'variants bulk many list translate translation', row: 'luna' },
+  { q: 'Voice-over', k: 'voice over vo narration speech read script speak tts', row: 'tts' },
+  { q: 'Background music', k: 'music soundtrack bed jingle song audio track', row: 'clip' },
+  { q: 'Remove a background', k: 'remove background cutout transparent png isolate', fix: 'img-cutout' },
+  { q: 'Resize to another format', k: 'resize aspect ratio outpaint smart outpaint extend fit placement pixel exact', fix: 'img-resize' },
+  { q: 'Add captions', k: 'captions subtitles transcribe text on video', fix: 'vid-caption' },
+  { q: 'Talking head', k: 'talking head lip sync avatar presenter spokesperson face speak', fix: 'vid-lipsync' },
+  { q: 'Make a video longer', k: 'extend longer continue clip', fix: 'vid-extend' },
+  { q: 'Change the background', k: 'background swap replace scene new backdrop', fix: 'img-bg' },
+  { q: 'Edit a photo', k: 'edit change detail recolor swap retouch fix relight photo', fix: 'img-edit' },
+];
+const POPULAR = [0, 5, 24, 16, 18, 11];
+
+const CHAINS = [
+  { t: 'Product photo to social video', nodes: [
+    { n: 'upload', txt: 'Product photo' },
+    { n: 'image', row: 'flare' },
+    { n: 'video', row: 'omni' },
+    { n: 'merge', fix: 'vid-audio', txt: 'Plus a Lyria 3 Clip bed' },
+  ] },
+  { t: 'One ad, many markets', nodes: [
+    { n: 'batch', txt: 'A list of cities' },
+    { n: 'prompt', row: 'luna' },
+    { n: 'image', row: 'flare' },
+  ] },
+  { t: 'Talking presenter', nodes: [
+    { n: 'tts', row: 'tts' },
+    { n: 'lipSync', fix: 'vid-lipsync', txt: 'Plus a portrait' },
+    { n: 'caption', fix: 'vid-caption', txt: 'Auto captions' },
+  ] },
+];
+
+/* Only presets and examples carry a tag; real team prompts don't. */
+const KIND = {
+  preset: { label: 'Preset', tip: 'A preset you can add from the Presets tab in the left panel' },
+  example: { label: 'Example', tip: 'Written for this guide' },
+};
+
+/* ===================== Helpers ===================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/(\d) (s|min|px)\b/g, '$1 $2').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isWide = () => window.matchMedia('(min-width: 881px)').matches;
+function icon(name, cls = '') {
+  const i = ICONS[name];
+  return i ? `<svg class="ic ${cls}" viewBox="${i.vb}" aria-hidden="true" focusable="false">${i.ds.map(d => `<path d="${d}"/>`).join('')}</svg>` : '';
+}
+const starHTML = label => `<span class="star" role="img" aria-label="${esc(label)}" title="${esc(label)}">${icon('StarFilled')}</span>`;
+const kindTag = kind => KIND[kind] ? `<span class="kind ${kind}" title="${esc(KIND[kind].tip)}">${KIND[kind].label}</span>` : '';
+const tabById = id => TABS.find(t => t.id === id);
+const ROWS = {};
+TABS.forEach(t => (t.rows || []).forEach(r => { ROWS[r.id] = { ...r, tab: t.id }; }));
+const FIX = Object.fromEntries(FIXES.map(f => [f.id, f]));
+const slotOf = (t, sid) => t.series.indexOf(sid) + 1;
+const colorOf = id => { const r = ROWS[id]; return `var(--s${slotOf(tabById(r.tab), r.series)})`; };
+const nodeOf = r => r.node || tabById(r.tab).node;
+const firstRowOf = sid => Object.values(ROWS).find(r => r.series === sid);
+const word = v => v >= 5 ? 'Best' : v >= 4 ? 'Strong' : v >= 3 ? 'Good' : v >= 2 ? 'Fair' : 'Weak';
+function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+/* ===================== State ===================== */
+const state = {
+  tab: 'image',
+  sel: { image: 'flare', video: 'omni', text: 'flash', audio: 'clip' },
+  preview: null,
+  variant: { veo: 'veo-frames', gpt: 'sol', gemini: 'flash', claude: 'sonnet', lyria: 'clip' },
+  open: null,      // row id whose card is showing
+  openFix: null,   // fix id whose card is showing
+  useIdx: {},
+};
+const activeId = () => (state.open ? state.sel[state.tab] : state.preview || state.sel[state.tab]);
+const cur = {};
+let animFrame = 0;
+
+/* ===================== Tabs ===================== */
+function renderTabs() {
+  $('#tabs').innerHTML = TABS.map(t => `<button role="tab" id="tab-${t.id}" aria-controls="panel" aria-selected="${t.id === state.tab}" tabindex="${t.id === state.tab ? 0 : -1}" data-tab="${t.id}">${icon(t.icon)}<span>${t.label}</span></button>`).join('');
+  $('#panel').setAttribute('aria-labelledby', `tab-${state.tab}`);
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b && b.dataset.tab !== state.tab) setTab(b.dataset.tab); });
+$('#tabs').addEventListener('keydown', e => {
+  const i = TABS.findIndex(t => t.id === state.tab);
+  const n = { ArrowRight: (i + 1) % TABS.length, ArrowLeft: (i - 1 + TABS.length) % TABS.length, Home: 0, End: TABS.length - 1 }[e.key];
+  if (n === undefined) return;
+  e.preventDefault();
+  setTab(TABS[n].id);
+  $(`#tab-${TABS[n].id}`).focus();
+});
+function setTab(id, instant) {
+  if (!tabById(id)) return;
+  state.tab = id;
+  state.preview = null;
+  state.open = null;
+  state.openFix = null;
+  store('noodles-guide-tab', id);
+  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  renderTabs();
+  renderPanel(instant);
+}
+
+/* ===================== Panel ===================== */
+function renderPanel(instant) {
+  const t = tabById(state.tab);
+  Object.keys(cur).forEach(k => delete cur[k]);
+  hideTip();
+  if (t.id === 'finishing') { $('#panel').innerHTML = finishingHTML(); return; }
+  $('#panel').innerHTML = `
+    <div class="explore">
+      <section class="list-col" aria-labelledby="list-h">
+        <div class="col-head"><h3 id="list-h">Model and setting</h3><p>${esc(t.hint)}</p></div>
+        <ol class="ladder" id="ladder">${t.rows.map(r => `<li>${rungHTML(ROWS[r.id])}</li>`).join('')}</ol>
+      </section>
+      <section class="chart-col" id="chart-col" aria-label="Model strengths and details">
+        <div id="chart-view">${t.axes ? radarShellHTML() : audioTreeHTML()}</div>
+        <div id="card-view"></div>
+      </section>
+    </div>`;
+  if (t.axes) buildRadar(t);
+  updateActive(instant);
+}
+
+function rungHTML(r) {
+  return `<button class="rung" data-row="${r.id}" style="--c:${colorOf(r.id)}" aria-expanded="false" aria-controls="mcard">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="rt">${esc(r.model)}${r.setting ? ` <span class="set">· ${esc(r.setting)}</span>` : ''}${r.best ? starHTML(r.best) : ''}</span>
+    ${icon('RightOutlined', 'go')}
+    <span class="rd">${esc(r.desc)}</span>
+  </button>`;
+}
+
+function updateActive(instant) {
+  const id = activeId();
+  $$('.rung').forEach(b => {
+    b.classList.toggle('is-active', b.dataset.row === id);
+    b.setAttribute('aria-expanded', state.open === b.dataset.row);
+  });
+  $$('.leaf').forEach(b => b.classList.toggle('is-active', b.dataset.row === id));
+  if (tabById(state.tab).axes) updateRadar(instant);
+}
+
+function preview(id) {
+  if (state.open || state.preview === id) return;
+  state.preview = id;
+  updateActive(false);
+}
+
+const inRow = el => el && el.closest && el.closest('.rung, .leaf');
+$('#panel').addEventListener('mouseover', e => { const b = inRow(e.target); if (b) preview(b.dataset.row); });
+$('#panel').addEventListener('mouseout', e => { if (inRow(e.target) && !inRow(e.relatedTarget)) preview(null); });
+$('#panel').addEventListener('focusin', e => { const b = inRow(e.target); if (b) preview(b.dataset.row); });
+$('#panel').addEventListener('focusout', e => { if (!inRow(e.relatedTarget)) preview(null); });
+$('#panel').addEventListener('click', e => {
+  if (e.target.closest('#mcard')) { onCardClick(e); return; }
+  const b = inRow(e.target);
+  if (b) {
+    const id = b.dataset.row;
+    if (state.open === id) closeCard(true);
+    else openCard(id, { focus: e.detail === 0, trigger: b });
+    return;
+  }
+  const f = e.target.closest('.fix');
+  if (f) { state.openFix === f.dataset.fix ? closeFix(true) : openFix(f.dataset.fix, { focus: e.detail === 0, trigger: f }); }
+});
+
+function choose(id) {
+  const r = ROWS[id];
+  state.sel[r.tab] = id;
+  state.variant[r.series] = id;
+}
+
+/* ===================== Radar ===================== */
+const RX = 240, RY = 206, RR = 138;
+const DASH = ['', '8 5', '0.1 5', '12 4 2 4'];
+const LEGEND_DASH = ['', '5 3', '0.1 4', '7 3 1 3'];
+function pt(i, n, v) {
+  const a = -Math.PI / 2 + i * 2 * Math.PI / n;
+  return [RX + RR * v / 5 * Math.cos(a), RY + RR * v / 5 * Math.sin(a)];
+}
+const ptsStr = pts => pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+
+function radarShellHTML() {
+  return `<div class="col-head"><h3>Model strengths</h3></div><div id="radar-box"></div><div class="legend" id="legend"></div><p class="chart-hint">Click a model for its card</p><div id="radar-table"></div>`;
+}
+
+function buildRadar(t) {
+  const n = t.axes.length;
+  const ring = k => ptsStr(t.axes.map((_, i) => pt(i, n, k)));
+  let s = `<svg class="radar-svg" viewBox="0 0 480 412" role="group" aria-label="Strengths of each ${t.label.toLowerCase()} model">`;
+  s += `<polygon class="r-bg" points="${ring(5)}"/>`;
+  for (let k = 1; k <= 5; k++) s += `<polygon class="r-ring" points="${ring(k)}"/>`;
+  t.axes.forEach((_, i) => { const [x, y] = pt(i, n, 5); s += `<line class="r-spoke" x1="${RX}" y1="${RY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`; });
+  t.axes.forEach((a, i) => {
+    const [x, y] = pt(i, n, 6.05);
+    const c = Math.cos(-Math.PI / 2 + i * 2 * Math.PI / n);
+    const anchor = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle';
+    const lines = a.l.split('\n');
+    const lh = 17;
+    let y0 = y - ((lines.length - 1) * lh) / 2 + 5;
+    if (i === 0) y0 = y - (lines.length - 1) * lh;
+    else if (Math.abs(c) < 0.3) y0 = y + 10;
+    const w = Math.max(...lines.map(l => l.length)) * 8.3 + 10;
+    const bx = anchor === 'start' ? x - 5 : anchor === 'end' ? x - w + 5 : x - w / 2;
+    s += `<g class="r-label" tabindex="0" data-axis="${i}" aria-label="${esc(a.l.replace('\n', ' '))}: ${esc(a.h)}">
+      <rect class="r-label-bg" x="${bx.toFixed(1)}" y="${(y0 - 15).toFixed(1)}" width="${w.toFixed(1)}" height="${lines.length * lh + 6}" rx="4"/>
+      <text x="${x.toFixed(1)}" y="${y0.toFixed(1)}" text-anchor="${anchor}">${lines.map((l, j) => `<tspan x="${x.toFixed(1)}" dy="${j ? lh : 0}">${esc(l)}</tspan>`).join('')}</text></g>`;
+  });
+  s += `<g id="r-series">${t.series.map(sid => {
+    const slot = slotOf(t, sid);
+    return `<polygon data-series="${sid}" stroke="var(--s${slot})" ${DASH[slot - 1] ? `stroke-dasharray="${DASH[slot - 1]}"` : ''} fill="none"/>`;
+  }).join('')}</g><g id="r-dots"></g><g id="r-hits"></g></svg>`;
+  $('#radar-box').innerHTML = s;
+  $('#radar-table').innerHTML = `<table class="sr-only"><caption>Scores out of 5 for each ${esc(t.label.toLowerCase())} model</caption>
+    <thead><tr><th>Model</th>${t.axes.map(a => `<th>${esc(a.l.replace('\n', ' '))}</th>`).join('')}</tr></thead>
+    <tbody>${t.rows.map(r => `<tr><td>${esc(r.model)}${r.setting ? ' · ' + esc(r.setting) : ''}${r.best ? ' (' + esc(r.best) + ')' : ''}</td>${r.profile.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const svg = $('#radar-box svg');
+  svg.addEventListener('pointerover', onRadarHover);
+  svg.addEventListener('pointerleave', hideTip);
+  svg.addEventListener('focusin', e => { const g = e.target.closest('.r-label'); if (g) { const b = g.getBoundingClientRect(); showTip(axisTip(t.axes[+g.dataset.axis]), b.left, b.bottom); } });
+  svg.addEventListener('focusout', hideTip);
+}
+
+function shownRow(sid) {
+  const act = ROWS[activeId()];
+  if (act && act.series === sid) return act;
+  const v = ROWS[state.variant[sid]];
+  return v && v.series === sid ? v : firstRowOf(sid);
+}
+
+function updateRadar(instant) {
+  const t = tabById(state.tab);
+  if (!$('#r-series')) return;
+  const n = t.axes.length;
+  const focus = ROWS[activeId()].series;
+  const targets = {};
+  t.series.forEach(sid => {
+    const p = $(`#r-series polygon[data-series="${sid}"]`);
+    const isFocus = sid === focus;
+    p.classList.toggle('is-focus', isFocus);
+    p.classList.toggle('is-dim', !isFocus);
+    p.setAttribute('fill', isFocus ? `var(--s${slotOf(t, sid)})` : 'none');
+    p.setAttribute('fill-opacity', isFocus ? '0.10' : '0');
+    targets[sid] = shownRow(sid).profile.map((v, i) => pt(i, n, v));
+    if (!cur[sid]) cur[sid] = instant ? targets[sid] : t.axes.map((_, i) => pt(i, n, 0));
+  });
+  $('#r-series').appendChild($(`#r-series polygon[data-series="${focus}"]`));
+  animate(targets, focus, t, instant);
+  $('#r-hits').innerHTML = targets[focus].map((p, i) => `<circle class="r-hit" r="12" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" data-axis="${i}"/>`).join('');
+  $('#legend').innerHTML = t.series.map(sid => {
+    const slot = slotOf(t, sid);
+    const r = shownRow(sid);
+    return `<span class="lg ${sid === focus ? 'is-active' : ''}"><svg viewBox="0 0 24 8" aria-hidden="true"><line x1="2" y1="4" x2="22" y2="4" stroke="var(--s${slot})" stroke-width="2.5" stroke-linecap="round" ${LEGEND_DASH[slot - 1] ? `stroke-dasharray="${LEGEND_DASH[slot - 1]}"` : ''}/></svg>${esc(r.model)}${r.best ? starHTML(r.best) : ''}</span>`;
+  }).join('');
+}
+
+function animate(targets, focus, t, instant) {
+  cancelAnimationFrame(animFrame);
+  const from = {};
+  Object.keys(targets).forEach(sid => from[sid] = cur[sid].map(p => p.slice()));
+  const D = instant || reduceMotion() ? 0 : 380;
+  const slot = slotOf(t, focus);
+  const t0 = performance.now();
+  const step = now => {
+    const p = D ? Math.min(1, (now - t0) / D) : 1;
+    const e = 1 - Math.pow(1 - p, 3);
+    Object.keys(targets).forEach(sid => {
+      cur[sid] = from[sid].map((a, i) => [a[0] + (targets[sid][i][0] - a[0]) * e, a[1] + (targets[sid][i][1] - a[1]) * e]);
+      const poly = $(`#r-series polygon[data-series="${sid}"]`);
+      if (poly) poly.setAttribute('points', ptsStr(cur[sid]));
+    });
+    const dots = $('#r-dots');
+    if (dots) dots.innerHTML = cur[focus].map(q => `<circle class="r-dot" r="4" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" fill="var(--s${slot})"/>`).join('');
+    if (p < 1) animFrame = requestAnimationFrame(step);
+  };
+  if (D) animFrame = requestAnimationFrame(step); else step(t0);
+}
+
+/* ===================== Tooltip ===================== */
+const tip = $('#tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  let left = x + 12, top = y + 12;
+  if (left + r.width > window.innerWidth - 8) left = x - r.width - 12;
+  if (top + r.height > window.innerHeight - 8) top = y - r.height - 12;
+  tip.style.left = Math.max(8, left) + 'px';
+  tip.style.top = Math.max(8, top) + 'px';
+}
+function hideTip() { tip.hidden = true; }
+const axisTip = a => `<b>${esc(a.l.replace('\n', ' '))}</b><br>${esc(a.h)}<br><span class="src">${a.m ? 'From the model catalog and team use' : 'Team rating'}</span>`;
+function onRadarHover(e) {
+  const t = tabById(state.tab);
+  const hit = e.target.closest('.r-hit');
+  if (hit) {
+    const r = ROWS[activeId()];
+    const a = t.axes[+hit.dataset.axis];
+    const v = r.profile[+hit.dataset.axis];
+    const b = hit.getBoundingClientRect();
+    showTip(`<b>${esc(r.model)}</b><br>${esc(a.l.replace('\n', ' '))}: ${esc(a.m && r.tips[a.k] ? r.tips[a.k] : word(v))}`, b.left + b.width / 2, b.top + b.height / 2);
+    return;
+  }
+  const g = e.target.closest('.r-label');
+  if (g) showTip(axisTip(t.axes[+g.dataset.axis]), e.clientX, e.clientY);
+  else hideTip();
+}
+window.addEventListener('scroll', hideTip, { passive: true });
+
+/* ===================== Audio decision ===================== */
+const leaf = id => `<button class="leaf" data-row="${id}" style="--c:${colorOf(id)}" aria-controls="mcard"><span class="dot" aria-hidden="true"></span>${esc(ROWS[id].model)}${ROWS[id].best ? starHTML(ROWS[id].best) : ''}</button>`;
+function audioTreeHTML() {
+  return `<div class="col-head"><h3>Music or voice?</h3></div>
+    <div class="tree">
+      <p class="q">Will someone speak?</p>
+      <div class="branches">
+        <div class="br"><span class="yn">Yes</span>${leaf('tts')}</div>
+        <div class="br"><span class="yn">No</span><p class="q">Longer than 30 seconds?</p>
+          <div class="branches">
+            <div class="br"><span class="yn">No</span>${leaf('clip')}</div>
+            <div class="br"><span class="yn">Yes</span>${leaf('pro')}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ===================== Model card ===================== */
+function emblemHTML(r) {
+  const t = tabById(r.tab);
+  if (!t.axes) return `<span class="mc-emblem mc-emblem-ic" aria-hidden="true">${icon(NODES[nodeOf(r)].icon)}</span>`;
+  const n = t.axes.length, C = 46, R = 40;
+  const p = (i, v) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; return (C + R * v / 5 * Math.cos(a)).toFixed(1) + ',' + (C + R * v / 5 * Math.sin(a)).toFixed(1); };
+  const ring = v => t.axes.map((_, i) => p(i, v)).join(' ');
+  return `<svg class="mc-emblem" viewBox="0 0 92 92" aria-hidden="true">
+    <polygon class="em-ring" points="${ring(5)}"/><polygon class="em-ring" points="${ring(2.5)}"/>
+    <polygon class="em-shape" points="${r.profile.map((v, i) => p(i, v)).join(' ')}"/></svg>`;
+}
+function flowHTML(flow) {
+  return `<span class="flow" role="img" aria-label="${esc(flow.map(f => NODES[f.replace('*', '')].label).join(', then '))}">${flow.map((f, i) => {
+    const k = f.replace('*', '');
+    return `${i ? '<span class="fl-edge"></span>' : ''}<span class="fn ${f.endsWith('*') ? 'self' : ''}" title="${esc(NODES[k].label)}">${icon(NODES[k].icon)}</span>`;
+  }).join('')}</span>`;
+}
+const chipsHTML = chips => chips.length ? `<div class="mc-chips">${chips.map(([k, v]) => `<span class="chip2"><span class="k">${esc(k)}</span>${esc(v)}</span>`).join('')}</div>` : '';
+function useHTML(r, u) {
+  const own = (u.fields || []).some(([k]) => k === 'Model');
+  const chips = [...(r.noModelChip || own ? [] : [['Model', r.pick || r.model]]), ...(u.fields || [])];
+  return `
+    <div class="mc-use-top">${flowHTML(u.flow)}${kindTag(u.kind)}</div>
+    <p class="mc-line">${esc(u.line)}</p>
+    <div class="mc-prompt">
+      <div class="mc-prompt-head"><span class="mc-from">${esc(u.from)}</span><button class="btn" data-copy>${icon('CopyOutlined')}Copy</button></div>
+      <p class="mc-ptext" id="mc-ptext"><span class="clamp">${esc(u.prompt)}</span></p>
+      ${u.prompt.length > 190 ? '<button class="mc-more" data-expand aria-expanded="false" aria-controls="mc-ptext">Show all</button>' : ''}
+    </div>
+    ${chipsHTML(chips)}
+    ${u.kind === 'preset' ? `<p class="mc-where">Add “${esc(u.preset || u.t)}” from the Presets tab in the left panel.</p>` : ''}`;
+}
+function cardHTML(r) {
+  const n = NODES[nodeOf(r)];
+  const uses = r.uses || [];
+  const ui = Math.min(state.useIdx[r.id] || 0, uses.length - 1);
+  const real = uses.some(u => u.kind !== 'example');
+  const badges = [
+    r.best ? `<span class="mc-badge best">${icon('StarFilled')}${esc(r.best)}</span>` : '',
+    r.badge ? `<span class="mc-badge">${esc(r.badge)}</span>` : '',
+  ].join('');
+  return `<div class="mcard-in">
+    <article class="mcard" id="mcard" tabindex="-1" style="--c:${colorOf(r.id)}" aria-labelledby="mc-title">
+      <header class="mc-cover">
+        ${emblemHTML(r)}
+        <p class="mc-eyebrow">${icon(n.icon)}${esc(n.label)} node <kbd title="Press ${n.key} on the canvas to add one">${n.key}</kbd></p>
+        <h3 class="mc-title" id="mc-title">${esc(r.model)}${r.setting ? ` <span class="set">· ${esc(r.setting)}</span>` : ''}</h3>
+        <p class="mc-desc">${esc(r.desc)}</p>
+        ${badges ? `<div class="mc-badges">${badges}</div>` : ''}
+        <button class="mc-close" data-close aria-label="Close the card">${icon('CloseOutlined')}</button>
+      </header>
+      <dl class="mc-facts">${r.facts.map(([v, k]) => `<div><dt>${esc(k)}</dt><dd title="${esc(v)}">${esc(v)}</dd></div>`).join('')}</dl>
+      ${uses.length ? `<section class="mc-body" aria-label="Use cases">
+        <h4 class="mc-h">${real ? 'Real use cases' : 'Example use cases'}</h4>
+        ${uses.length > 1 ? `<div class="mc-tabs" role="tablist" aria-label="Use cases">${uses.map((u, i) => `<button role="tab" class="mc-tab" id="mc-tab-${i}" aria-selected="${i === ui}" aria-controls="mc-use" data-use="${i}">${esc(u.t)}</button>`).join('')}</div>` : ''}
+        <div class="mc-use" id="mc-use" ${uses.length > 1 ? `role="tabpanel" aria-labelledby="mc-tab-${ui}"` : ''}>${useHTML(r, uses[ui])}</div>
+      </section>` : ''}
+    </article></div>`;
+}
+function fixCardHTML(f) {
+  const n = NODES[f.node];
+  return `<div class="mcard-in">
+    <article class="mcard" id="mcard" tabindex="-1" style="--c:var(--primary)" aria-labelledby="mc-title">
+      <header class="mc-cover">
+        <span class="mc-emblem mc-emblem-ic" aria-hidden="true">${icon(n.icon)}</span>
+        <p class="mc-eyebrow">${esc(n.label)} node ${f.noKey ? '' : `<kbd title="Press ${n.key} on the canvas to add one">${n.key}</kbd>`}</p>
+        <h3 class="mc-title" id="mc-title">${esc(f.q)}</h3>
+        <p class="mc-desc">${esc(f.text)}</p>
+        <button class="mc-close" data-close aria-label="Close the card">${icon('CloseOutlined')}</button>
+      </header>
+      ${f.facts ? `<dl class="mc-facts">${f.facts.map(([v, k]) => `<div><dt>${esc(k)}</dt><dd title="${esc(v)}">${esc(v)}</dd></div>`).join('')}</dl>` : ''}
+      ${f.fields || f.use || f.more || f.prompt || f.fallback ? `<section class="mc-body">
+        ${f.fields ? `<h4 class="mc-h">Set it up</h4>${chipsHTML(f.fields)}` : ''}
+        ${f.prompt ? `<div class="mc-prompt"><div class="mc-prompt-head"><span class="mc-from">Image node prompt, with the image connected</span><button class="btn" data-copy>${icon('CopyOutlined')}Copy</button></div><p class="mc-ptext" id="mc-ptext"><span class="clamp">${esc(f.prompt)}</span></p></div>` : ''}
+        ${f.fallback ? `<h4 class="mc-h">Fallback</h4><div class="mc-use"><div class="fb-head"><span class="fn">${icon(NODES[f.fallback.node].icon)}</span>${esc(NODES[f.fallback.node].label)} node <kbd title="Press ${NODES[f.fallback.node].key} on the canvas to add one">${NODES[f.fallback.node].key}</kbd></div><p class="mc-line">${esc(f.fallback.text)}</p>${chipsHTML(f.fallback.fields)}</div>` : ''}
+        ${f.use ? `<div class="mc-use"><div class="mc-use-top">${flowHTML(f.use.flow)}${kindTag(f.use.kind)}</div>
+          <p class="mc-line">${f.use.kind === 'preset' ? `<b>${esc(f.use.t)}.</b> ` : ''}${esc(f.use.line)}</p>
+          ${f.use.kind === 'preset' ? `<p class="mc-where">Add it from the Presets tab in the left panel.</p>` : ''}</div>` : ''}
+        ${f.more ? `<h4 class="mc-h">Good to know</h4><p class="mc-note">${esc(f.more)}</p>` : ''}
+      </section>` : ''}
+    </article></div>`;
+}
+
+function removeCards() {
+  $$('.card-slot, .fix-slot').forEach(el => el.remove());
+  const view = $('#card-view');
+  if (view) view.innerHTML = '';
+}
+
+function openCard(id, opts = {}) {
+  const r = ROWS[id];
+  if (!r) return;
+  if (state.tab !== r.tab) setTab(r.tab);
+  choose(id);
+  state.open = id;
+  state.preview = null;
+  removeCards();
+  const html = cardHTML(r);
+  if (isWide()) {
+    $('#chart-view').hidden = true;
+    $('#chart-col').classList.add('has-card');
+    $('#card-view').innerHTML = html;
+  } else {
+    const li = $(`.rung[data-row="${id}"]`).closest('li');
+    li.insertAdjacentHTML('afterend', `<li class="card-slot">${html}</li>`);
+  }
+  hideTip();
+  updateActive(false);
+  settleIntoView($('#mcard'), opts);
+}
+
+function closeCard(restoreFocus) {
+  if (!state.open) return;
+  const id = state.open;
+  state.open = null;
+  removeCards();
+  const view = $('#chart-view');
+  if (view) {
+    view.hidden = false;
+    $('#chart-col').classList.remove('has-card');
+    view.classList.remove('rise'); void view.offsetWidth; view.classList.add('rise');
+  }
+  updateActive(false);
+  if (restoreFocus) { const b = $(`.rung[data-row="${id}"]`); if (b) b.focus({ preventScroll: true }); }
+}
+
+function openFix(id, opts = {}) {
+  if (state.tab !== 'finishing') setTab('finishing');
+  closeFix(false);
+  state.openFix = id;
+  const btn = $(`.fix[data-fix="${id}"]`);
+  btn.setAttribute('aria-expanded', 'true');
+  btn.closest('li').insertAdjacentHTML('afterend', `<li class="fix-slot">${fixCardHTML(FIX[id])}</li>`);
+  settleIntoView($('#mcard'), opts);
+}
+function closeFix(restoreFocus) {
+  if (!state.openFix) return;
+  const id = state.openFix;
+  state.openFix = null;
+  removeCards();
+  const btn = $(`.fix[data-fix="${id}"]`);
+  if (btn) { btn.setAttribute('aria-expanded', 'false'); if (restoreFocus) btn.focus({ preventScroll: true }); }
+}
+
+function settleIntoView(card, opts) {
+  if (!card) return;
+  if (opts.focus) card.focus({ preventScroll: true });
+  requestAnimationFrame(() => {
+    const r = card.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) {
+      const tall = r.height > window.innerHeight - 32;
+      card.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: tall || r.top < 0 ? 'start' : 'nearest' });
+    }
+  });
+}
+
+function onCardClick(e) {
+  if (e.target.closest('[data-close]')) { state.open ? closeCard(true) : closeFix(true); return; }
+  if (state.openFix) { if (e.target.closest('[data-copy]')) copyText(FIX[state.openFix].prompt, $('#mc-ptext')); return; }
+  if (!state.open) return;
+  const r = ROWS[state.open];
+  const tabBtn = e.target.closest('[data-use]');
+  if (tabBtn) {
+    const i = +tabBtn.dataset.use;
+    state.useIdx[r.id] = i;
+    $$('.mc-tab').forEach(b => b.setAttribute('aria-selected', b === tabBtn));
+    const panel = $('#mc-use');
+    panel.setAttribute('aria-labelledby', tabBtn.id);
+    panel.innerHTML = useHTML(r, r.uses[i]);
+    panel.classList.remove('swap'); void panel.offsetWidth; panel.classList.add('swap');
+    return;
+  }
+  if (e.target.closest('[data-copy]')) { copyText(r.uses[state.useIdx[r.id] || 0].prompt, $('#mc-ptext')); return; }
+  const more = e.target.closest('[data-expand]');
+  if (more) {
+    const open = $('#mc-ptext').classList.toggle('is-open');
+    more.setAttribute('aria-expanded', open);
+    more.textContent = open ? 'Show less' : 'Show all';
+  }
+}
+$('#panel').addEventListener('keydown', e => {
+  const tabBtn = e.target.closest('.mc-tab');
+  if (!tabBtn || !['ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+  const tabs = $$('.mc-tab');
+  const i = tabs.indexOf(tabBtn);
+  const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+  e.preventDefault();
+  next.click();
+  next.focus();
+});
+
+/* ===================== Finishing ===================== */
+function fixHTML(f) {
+  const n = NODES[f.node];
+  return `<li><button class="fix" data-fix="${f.id}" aria-expanded="false" aria-controls="mcard">
+    <span class="fix-ic" aria-hidden="true">${icon(n.icon)}</span>
+    <span><span class="fix-t">${esc(f.q)}</span><span class="fix-n">${esc(n.label)}${f.model ? ' · ' + esc(f.model) : ''}</span></span>
+    ${icon('RightOutlined', 'go')}
+  </button></li>`;
+}
+function finishingHTML() {
+  return `<div class="fix-cols">
+    <section aria-labelledby="fi-h"><div class="col-head"><h3 id="fi-h">Images</h3><p>Finish on Sunburst at High quality. Use Edit Image only for cutouts.</p></div>
+      <ul class="fix-list">${FIXES.filter(f => f.group === 'image').map(fixHTML).join('')}</ul></section>
+    <section aria-labelledby="fv-h"><div class="col-head"><h3 id="fv-h">Videos</h3><p>Cut it, add sound or captions, or make someone talk.</p></div>
+      <ul class="fix-list">${FIXES.filter(f => f.group === 'video').map(fixHTML).join('')}</ul></section>
+  </div>`;
+}
+
+/* ===================== Chains ===================== */
+function renderChains() {
+  $('#chains').innerHTML = CHAINS.map(c => `<div class="chain"><h3>${esc(c.t)}</h3><div class="chain-flow">${c.nodes.map((nd, i) => {
+    const n = NODES[nd.n];
+    const r = nd.row ? ROWS[nd.row] : null;
+    const tag = nd.row || nd.fix ? 'button' : 'div';
+    const data = nd.row ? `data-row="${nd.row}"` : nd.fix ? `data-fix="${nd.fix}"` : '';
+    const body = r ? `<span class="dot" style="--c:${colorOf(r.id)}"></span>${esc(r.model)}${r.best ? starHTML(r.best) : ''}` : esc(nd.txt);
+    return `${i ? '<span class="edge" aria-hidden="true"></span>' : ''}<${tag} class="mn" ${data}><span class="mn-h">${icon(n.icon)}${esc(n.label)}</span><span class="mn-b">${body}</span></${tag}>`;
+  }).join('')}</div></div>`).join('');
+}
+$('#chains').addEventListener('click', e => {
+  const b = e.target.closest('button.mn');
+  if (!b) return;
+  if (b.dataset.row) openCard(b.dataset.row, { trigger: b });
+  else openFix(b.dataset.fix, { trigger: b });
+});
+
+/* ===================== Finder ===================== */
+const input = $('#find');
+const list = $('#find-list');
+let matches = [], active = -1;
+const whereOf = task => task.row ? tabById(ROWS[task.row].tab).label : 'Finishing';
+function search(q) {
+  q = q.trim().toLowerCase();
+  if (!q) return POPULAR.slice();
+  const words = q.split(/\s+/);
+  return TASKS.map((t, i) => {
+    const hay = (t.q + ' ' + t.k).toLowerCase();
+    if (!words.every(w => hay.includes(w))) return null;
+    return [t.q.toLowerCase().startsWith(q) ? 0 : t.q.toLowerCase().includes(q) ? 1 : 2, i];
+  }).filter(Boolean).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+}
+function openList() {
+  matches = search(input.value);
+  active = matches.length ? 0 : -1;
+  list.innerHTML = matches.length
+    ? matches.map((i, j) => `<li role="option" id="opt-${j}" data-task="${i}" aria-selected="${j === active}"><span>${esc(TASKS[i].q)}</span><span>${whereOf(TASKS[i])}</span></li>`).join('')
+    : `<li class="empty" role="option" aria-disabled="true">No match. Try “banner”, “captions” or “voice”.</li>`;
+  list.hidden = false;
+  input.setAttribute('aria-expanded', 'true');
+  if (active >= 0) input.setAttribute('aria-activedescendant', 'opt-0'); else input.removeAttribute('aria-activedescendant');
+}
+function closeList() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); }
+function moveActive(d) {
+  if (!matches.length) return;
+  active = (active + d + matches.length) % matches.length;
+  $$('[role=option]', list).forEach((li, j) => li.setAttribute('aria-selected', j === active));
+  input.setAttribute('aria-activedescendant', 'opt-' + active);
+  const el = $('#opt-' + active); if (el) el.scrollIntoView({ block: 'nearest' });
+}
+input.addEventListener('input', openList);
+input.addEventListener('focus', openList);
+input.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); if (list.hidden) openList(); else moveActive(1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
+  else if (e.key === 'Enter' && active >= 0 && !list.hidden) { e.preventDefault(); pickTask(matches[active]); }
+  else if (e.key === 'Escape') { closeList(); }
+});
+input.addEventListener('blur', () => setTimeout(closeList, 120));
+list.addEventListener('mousedown', e => { const li = e.target.closest('[data-task]'); if (li) { e.preventDefault(); pickTask(+li.dataset.task); } });
+function pickTask(i) {
+  const t = TASKS[i];
+  input.value = '';
+  closeList();
+  input.blur();
+  if (t.row) openCard(t.row);
+  else openFix(t.fix);
+}
+
+/* ===================== Keys, copy, toast ===================== */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && (state.open || state.openFix) && document.activeElement !== input) {
+    e.preventDefault();
+    state.open ? closeCard(true) : closeFix(true);
+    return;
+  }
+  if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && !e.metaKey && !e.ctrlKey) { e.preventDefault(); input.focus(); }
+});
+let wasWide = isWide();
+window.addEventListener('resize', () => {
+  const wide = isWide();
+  if (wide === wasWide) return;
+  wasWide = wide;
+  if (state.open) { const id = state.open; closeCard(false); openCard(id); }
+});
+
+let toastTimer = 0;
+function toast(msg) {
+  $('#toast-msg').textContent = msg;
+  $('#toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 1800);
+}
+function copyText(text, el) {
+  const fallback = () => {
+    if (el) { el.classList.add('is-open'); const range = document.createRange(); range.selectNodeContents(el); const s = window.getSelection(); s.removeAllRanges(); s.addRange(range); }
+    toast('Selected. Press ⌘C or Ctrl+C to copy');
+  };
+  try { navigator.clipboard.writeText(text).then(() => toast('Prompt copied'), fallback); } catch (e) { fallback(); }
+}
+
+/* ===================== Boot ===================== */
+$('#search-ic').outerHTML = icon('SearchOutlined');
+$('#toast-ic').outerHTML = icon('CheckOutlined');
+renderChains();
+const hash = (location.hash || '').slice(1);
+const saved = load('noodles-guide-tab');
+state.tab = tabById(hash) ? hash : tabById(saved) ? saved : 'image';
+renderTabs();
+renderPanel(true);
+</script>
+
+</html>
